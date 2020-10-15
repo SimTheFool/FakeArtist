@@ -1,24 +1,25 @@
-<script>
-	import Nav from '../components/Nav.svelte';
-	import Footer from '../components/Footer.svelte';
-
-	export let segment;
-</script>
-
-<style>
-	main {
-		position: relative;
-		max-width: 960px;
-		padding: 60px 10px;
-		margin: 0 auto;
-		box-sizing: border-box;
-	}
-</style>
-
-<Nav {segment}/>
-
 <main>
+	<Background backgrounds={backgrounds}/>
 	<slot></slot>
 </main>
 
-<Footer/>
+<script context="module">
+    export async function preload(page, session) {
+        const res = await this.fetch(`api/backgrounds`);
+		const backgrounds = await res.json();
+        return {backgrounds};
+	}
+</script>
+
+<script>
+	import Background from "components/Background.svelte";
+	export let backgrounds;
+</script>
+
+<style>
+ 	main
+	{
+		width: 100vw;
+		height: 100vh;	
+	}
+</style>
