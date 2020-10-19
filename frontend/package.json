@@ -11,10 +11,13 @@
     "sirv": "^1.0.0"
   },
   "devDependencies": {
+    "@babel/core": "^7.12.3",
+    "@babel/preset-env": "^7.12.1",
+    "babel-loader": "^8.1.0",
     "sapper": "^0.28.0",
     "svelte": "^3.17.3",
     "svelte-loader": "^2.9.0",
-    "webpack": "^4.7.0",
+    "webpack": "^4.44.2",
     "webpack-modules": "^1.0.0"
   },
   "scripts": {

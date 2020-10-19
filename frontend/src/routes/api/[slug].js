@@ -4,27 +4,51 @@ const fakeDB =
     {
         "0": 
         {
-            img : "background0.jpg",
+            src : "background0.jpg",
             scale : 125,
-            offsetY : 0
+            offsetY : 0,
+            brightness: 75,
+            contrast: 250,
+            lightboxX: 55,
+            lightboxY: 100,
+            lightboxColor: "#ffedbc",
+            lightboxMaxScale: 1.6
         },
         "1": 
         {
-            img : "background1.jpg",
+            src : "background1.jpg",
             scale : 200,
-            offsetY : 20
+            offsetY : 20,
+            brightness: 130,
+            contrast: 300,
+            lightboxX: 50,
+            lightboxY: 55,
+            lightboxColor: "#aaeebc",
+            lightboxMaxScale: 2.6
         },
         "2": 
         {
-            img : "background2.jpg",
+            src : "background2.jpg",
             scale : 120,
-            offsetY : 0
+            offsetY : 0,
+            brightness: 100,
+            contrast: 150,
+            lightboxX: 110,
+            lightboxY: 80,
+            lightboxColor: "#ffadaa",
+            lightboxMaxScale: 1.6
         },
         "3":
         {
-            img : "background3.jpg",
+            src : "background3.jpg",
             scale : 115,
-            offsetY : 0
+            offsetY : 0,
+            brightness: 80,
+            contrast: 200,
+            lightboxX: 10,
+            lightboxY: 10,
+            lightboxColor: "#99a1ee",
+            lightboxMaxScale: 1.9
         }
     }
 };
