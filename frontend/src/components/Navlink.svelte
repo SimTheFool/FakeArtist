@@ -5,7 +5,6 @@
 >
     <slot>
     </slot>
-    id {backgroundId}
 </a>
 
 <script>
@@ -19,5 +18,14 @@
 </script>
 
 <style>
-    
+    a
+    {
+        text-decoration: none;
+        color: white;
+    }
+
+    a:visited
+    {
+        color: white;
+    }
 </style>

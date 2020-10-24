@@ -22,6 +22,8 @@
         <div class="shadow-frame"></div>
         <div class="light-box"></div>
     </div>
+
+    <slot></slot>
         
 </div>
 
@@ -92,12 +94,7 @@
 <style>
     .background-container
     {
-        position: absolute;
-        top: 0;
-        left: 0;
-        z-index: -1;
-
-        width: 100%;
+        flex: 1 1 100%;
         height: 100%;
         display: flex;
         justify-content: center;
