@@ -4,6 +4,7 @@
     use:appendStyle={() => ({
         "--background-scale" : currentBackground ? `${currentBackground.scale}%` : "100%",
         "--background-offset-y" : currentBackground ? `${currentBackground.offsetY}%` : "0%",
+        "--background-offset-x" : currentBackground ? `${currentBackground.offsetX}%` : "0%",
         "--background-brightness" : `${$brightness}%`,
         "--background-contrast" : currentBackground ? `${currentBackground.contrast}%` : "100%",
         "--background-blur" : `${$blur}px`,
@@ -108,7 +109,10 @@
 
     .img-container
     {
-        display: inline-block;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        align-content: center;
         height: 100%;
 
         overflow: hidden;
@@ -124,7 +128,7 @@
         height: calc(100% + 2px);
         width: calc(100% + 2px);
 
-        box-shadow: inset 0px 0px 10px 30px black;
+        box-shadow: inset 0px 0px 10px 20px black;
         box-sizing: border-box;
     }
 
@@ -140,7 +144,7 @@
         background: radial-gradient(
             circle at var(--lightbox-x) var(--lightbox-y),
             var(--lightbox-color-begin) 0%,
-            var(--lightbox-color-begin) calc(15% * var(--lightbox-scale)),
+            var(--lightbox-color-begin) calc(10% * var(--lightbox-scale)),
             var(--lightbox-color-end) calc(25% * var(--lightbox-scale))
         );
         mix-blend-mode: overlay;

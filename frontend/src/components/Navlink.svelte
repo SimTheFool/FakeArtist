@@ -22,6 +22,9 @@
     {
         text-decoration: none;
         color: white;
+        font-family:  'Alegreya Sans SC', sans-serif;
+        font-size: 2em;
+        font-weight: 400;
     }
 
     a:visited

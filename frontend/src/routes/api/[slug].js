@@ -17,38 +17,38 @@ const fakeDB =
         "1": 
         {
             src : "background1.jpg",
-            scale : 200,
-            offsetY : 20,
-            brightness: 130,
-            contrast: 300,
+            scale : 100,
+            offsetY : 0,
+            brightness: 50,
+            contrast: 150,
             lightboxX: 50,
-            lightboxY: 55,
-            lightboxColor: "#aaeebc",
-            lightboxMaxScale: 2.6
+            lightboxY: 100,
+            lightboxColor: "#971513",
+            lightboxMaxScale: 1.5
         },
         "2": 
         {
             src : "background2.jpg",
-            scale : 120,
+            scale : 100,
             offsetY : 0,
-            brightness: 100,
-            contrast: 150,
-            lightboxX: 110,
-            lightboxY: 80,
-            lightboxColor: "#ffadaa",
+            brightness: 50,
+            contrast: 200,
+            lightboxX: 125,
+            lightboxY: 75,
+            lightboxColor: "#678510",
             lightboxMaxScale: 1.6
         },
         "3":
         {
             src : "background3.jpg",
-            scale : 115,
+            scale : 100,
             offsetY : 0,
-            brightness: 80,
-            contrast: 200,
-            lightboxX: 10,
+            brightness: 75,
+            contrast: 150,
+            lightboxX: 105,
             lightboxY: 10,
-            lightboxColor: "#99a1ee",
-            lightboxMaxScale: 1.9
+            lightboxColor: "#7d7d33",
+            lightboxMaxScale: 1.3
         }
     }
 };
