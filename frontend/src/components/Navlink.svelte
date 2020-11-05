@@ -2,18 +2,29 @@
     href={url}
     on:mouseover={handleLinkHover}
     on:touchstart={handleLinkHover}
+    on:click={handleLinkClick}
 >
     <slot>
     </slot>
 </a>
 
 <script>
-    import { id } from 'stores/background.js';
-    export let url = "";    
-    export let backgroundId;
+    import { createEventDispatcher } from "svelte";
 
-    function handleLinkHover(e) {
-        id.set(backgroundId);
+    export let url = "";    
+
+    const dispatch = createEventDispatcher();
+
+    const handleLinkHover = (e) => {
+        dispatch("linkhover", {
+            url : url
+        });
+    };
+
+    const handleLinkClick = (e) => {
+        dispatch("linkclick", {
+            url : url
+        });
     };
 </script>
 

@@ -1,8 +1,8 @@
 <main>
-	<Background backgrounds={backgrounds}>
+	<Background backgroundDatas={$backgroundDatas} blured={blured}>
 		<slot></slot>
 	</Background>
-	<Navbar/>
+	<Navbar on:linkhover={handleLinkHover} on:linkclick={handleLinkClick}/>
 </main>
 
 <script context="module">
@@ -16,7 +16,27 @@
 <script>
 	import Background from "components/Background.svelte";
 	import Navbar from "components/Navbar.svelte";
+	import {urlKey, backgroundsRegistry, backgroundDatas} from "stores/background.js";
+
 	export let backgrounds;
+	export let segment;
+
+	backgroundsRegistry.set(backgrounds);
+	urlKey.set(segment ? segment : "");
+
+	let blured = segment ? true : false;
+
+	const handleLinkHover = (e) => {
+		let linkSegment = e.detail.url.slice(2);
+		urlKey.set(linkSegment);
+	};
+
+	const handleLinkClick = (e) => {
+		let linkSegment = e.detail.url.slice(2);
+		urlKey.set(linkSegment);
+
+		blured = linkSegment ? true : false;	
+	};
 </script>
 
 <style>

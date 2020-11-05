@@ -15,6 +15,7 @@
         "--lightbox-color-end" : currentBackground ? `${currentBackground.lightboxColor}00` : "#FFFFFF00"
     })}
 >
+
     <div class="img-container">
         <img class="background-img"
         src={currentBackground ? currentBackground.src : ""}
@@ -31,49 +32,98 @@
 <script>
     import { tweened } from 'svelte/motion';
     import { linear } from 'svelte/easing';
-    import { backgroundsRegistry, backgroundDatas } from 'stores/background.js';
+    import { createMachine } from 'xstate';
+    import { useMachine } from 'utils/useMachine.js';
     import { appendStyle } from 'actions/appendStyle';
 
-    export let backgrounds = null;
-    backgroundsRegistry.set(backgrounds);
+    export let backgroundDatas;
+    export let blured;
 
-    let currentBackground = $backgroundDatas;
+    let currentBackground = backgroundDatas;
+    let currentBlured = blured;
 
     const tweeningOpt = {
         duration: 750,
         easing: linear
     }
-    const brightness = tweened($backgroundDatas ? $backgroundDatas.brightness : 100, tweeningOpt);
-    const blur = tweened(0, tweeningOpt);
+    const brightness = tweened(backgroundDatas ? backgroundDatas.brightness : 100, tweeningOpt);
+    const blur = tweened(blured ? 4 : 0, tweeningOpt);
 
-    const vanish = () => {
-        blur.set(4);
-        return brightness.set(0);
-    };
-
-    const appear = () => {
-        currentBackground = $backgroundDatas;
-        blur.set(0);
-        brightness.set(currentBackground.brightness);
-    };
-
-    $: if (currentBackground != $backgroundDatas)
+    const animMachine = createMachine({
+        id: "animMachine",
+        context: {
+            preload: null
+        },
+        initial: "idle",
+        states:
+        {
+            idle:
+            {   
+                on: { BACKGROUND_CHANGE: "vanish", BLURED_CHANGE: "appear" }
+            },
+            vanish:
+            {
+                invoke:
+                {
+                    src: "vanish",
+                    onDone: { target : "appear"}
+                }
+            },
+            appear:
+            {
+                invoke:
+                {
+                    src: "appear",
+                    onDone: { target : "idle"}
+                },
+                on: { BACKGROUND_CHANGE: "vanish", BLURED_CHANGE: "appear" }
+            }
+        }
+    },
     {
-        let preload = new Image();
-        preload.src = $backgroundDatas.src;
+        services:
+        {
+            vanish: (ctx) => {
+                ctx.preload = new Image();
+                ctx.preload.src = backgroundDatas.src;
 
-        vanish().then(() => {
-            if(!preload.complete)
-            {
-                preload.addEventListener('load', () => {
-                    appear();
-                });
+                blur.set(4);
+                return brightness.set(0);
+            },
+            appear: (ctx) => {
+                const appear = () => {
+                    currentBackground = backgroundDatas;
+                    blur.set(blured ? 4 : 0);
+                    return brightness.set(currentBackground.brightness);
+                };
+
+                if(ctx.preload && !ctx.preload.complete)
+                {
+                    return new Promise((resolve, reject) => {
+                        ctx.preload.addEventListener('load', () => {
+                            appear().then(resolve());
+                        });
+                    });
+                }
+                else
+                {
+                    return appear();
+                }
             }
-            else
-            {
-                appear();
-            }
-        });
+        }
+    });
+
+    const { state, send } = useMachine(animMachine);
+
+    $ : if(currentBackground != backgroundDatas)
+    {
+        send("BACKGROUND_CHANGE");
+    }
+
+    $ : if(currentBlured != blured)
+    {
+        currentBlured = blured;
+        send("BLURED_CHANGE");
     }
 
     const lightboxScale = tweened(1, {
@@ -82,7 +132,7 @@
     });
 
     const growLightbox = () => {
-        lightboxScale.set($backgroundDatas ? $backgroundDatas.lightboxMaxScale : 1.5).then(shrinkLightbox);
+        lightboxScale.set(backgroundDatas ? backgroundDatas.lightboxMaxScale : 1.5).then(shrinkLightbox);
     };
 
     const shrinkLightbox = () => {

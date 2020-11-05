@@ -2,7 +2,7 @@ const fakeDB =
 {
     "backgrounds":
     {
-        "0": 
+        "": 
         {
             src : "background0.jpg",
             scale : 125,
@@ -14,7 +14,7 @@ const fakeDB =
             lightboxColor: "#ffedbc",
             lightboxMaxScale: 1.6
         },
-        "1": 
+        "drawings": 
         {
             src : "background1.jpg",
             scale : 100,
@@ -26,7 +26,7 @@ const fakeDB =
             lightboxColor: "#971513",
             lightboxMaxScale: 1.5
         },
-        "2": 
+        "about": 
         {
             src : "background2.jpg",
             scale : 100,
@@ -38,7 +38,7 @@ const fakeDB =
             lightboxColor: "#678510",
             lightboxMaxScale: 1.6
         },
-        "3":
+        "contact":
         {
             src : "background3.jpg",
             scale : 100,

@@ -1,9 +1,10 @@
 
 <nav>
     <ul>
-        <li><Navlink backgroundId={1}>Drawing</Navlink></li>
-        <li><Navlink backgroundId={2}>About</Navlink></li>
-        <li><Navlink backgroundId={3}>Contact</Navlink></li>
+        <li><Navlink on:linkhover on:linkclick url="./">Home</Navlink></li>
+        <li><Navlink on:linkhover on:linkclick url="./drawings">Drawing</Navlink></li>
+        <li><Navlink on:linkhover on:linkclick url="./about">About</Navlink></li>
+        <li><Navlink on:linkhover on:linkclick url="./contact">Contact</Navlink></li>
     </ul>
 </nav>
 
