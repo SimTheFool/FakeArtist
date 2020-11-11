@@ -1,5 +1,5 @@
 
-<div 
+<div
     class="background-container"
     use:appendStyle={() => ({
         "--background-scale" : currentBackground ? `${currentBackground.scale}%` : "100%",
@@ -11,8 +11,9 @@
         "--lightbox-x" : currentBackground ? `${currentBackground.lightboxX}%` : "50%",
         "--lightbox-y" : currentBackground ? `${currentBackground.lightboxY}%` : "50%",
         "--lightbox-scale" : $lightboxScale,
-        "--lightbox-color-begin" : currentBackground ? `${currentBackground.lightboxColor}` : "#FFFFFF",
-        "--lightbox-color-end" : currentBackground ? `${currentBackground.lightboxColor}00` : "#FFFFFF00"
+        "--lightbox-color-begin" : currentBackground ? `${currentBackground.lightboxColor}` : "#000000",
+        "--lightbox-color-end" : currentBackground ? `${currentBackground.lightboxColor}00` : "#00000000",
+        "--lightbox-opacity" : `${$lightboxOpacity}`
     })}
 >
 
@@ -30,24 +31,31 @@
 </div>
 
 <script>
+    import { onMount } from 'svelte';
     import { tweened } from 'svelte/motion';
     import { linear } from 'svelte/easing';
     import { createMachine } from 'xstate';
     import { useMachine } from 'utils/useMachine.js';
     import { appendStyle } from 'actions/appendStyle';
+    import { backgroundDatas } from "stores/background.js";
 
-    export let backgroundDatas;
     export let blured;
 
-    let currentBackground = backgroundDatas;
-    let currentBlured = blured;
+    let isMounted = false;
+    onMount(() => {
+        isMounted = true;
+    });
+
+    let currentBackground = null;
+    let currentBlured = false;
 
     const tweeningOpt = {
-        duration: 750,
+        duration: 1500,
         easing: linear
     }
-    const brightness = tweened(backgroundDatas ? backgroundDatas.brightness : 100, tweeningOpt);
+    const brightness = tweened($backgroundDatas ? $backgroundDatas.brightness : 100, tweeningOpt);
     const blur = tweened(blured ? 4 : 0, tweeningOpt);
+    const lightboxOpacity = tweened(0, tweeningOpt);
 
     const animMachine = createMachine({
         id: "animMachine",
@@ -85,15 +93,17 @@
         {
             vanish: (ctx) => {
                 ctx.preload = new Image();
-                ctx.preload.src = backgroundDatas.src;
+                ctx.preload.src = $backgroundDatas.src;
 
                 blur.set(4);
+                lightboxOpacity.set(0);
                 return brightness.set(0);
             },
             appear: (ctx) => {
                 const appear = () => {
-                    currentBackground = backgroundDatas;
+                    currentBackground = $backgroundDatas;
                     blur.set(blured ? 4 : 0);
+                    lightboxOpacity.set(1);
                     return brightness.set(currentBackground.brightness);
                 };
 
@@ -113,14 +123,14 @@
         }
     });
 
-    const { state, send } = useMachine(animMachine);
+    const { send } = useMachine(animMachine);
 
-    $ : if(currentBackground != backgroundDatas)
+    $ : if(currentBackground != $backgroundDatas && isMounted)
     {
         send("BACKGROUND_CHANGE");
     }
 
-    $ : if(currentBlured != blured)
+    $ : if(currentBlured != blured && isMounted)
     {
         currentBlured = blured;
         send("BLURED_CHANGE");
@@ -132,7 +142,7 @@
     });
 
     const growLightbox = () => {
-        lightboxScale.set(backgroundDatas ? backgroundDatas.lightboxMaxScale : 1.5).then(shrinkLightbox);
+        lightboxScale.set($backgroundDatas ? $backgroundDatas.lightboxMaxScale : 1.5).then(shrinkLightbox);
     };
 
     const shrinkLightbox = () => {
@@ -197,6 +207,7 @@
             var(--lightbox-color-begin) calc(10% * var(--lightbox-scale)),
             var(--lightbox-color-end) calc(25% * var(--lightbox-scale))
         );
+        opacity: var(--lightbox-opacity);
         mix-blend-mode: overlay;
     }
 
@@ -205,5 +216,11 @@
         height: 100%;
         width: auto;
         filter: grayscale(100%) contrast(var(--background-contrast)) brightness(var(--background-brightness)) blur(var(--background-blur));
+    }
+
+    .background-img[src=""]
+    {
+        font-size: 0;
+        position: relative;
     }
 </style>

@@ -1,17 +1,25 @@
-<a
-    href={url}
-    on:mouseover={handleLinkHover}
-    on:touchstart={handleLinkHover}
-    on:click={handleLinkClick}
->
-    <slot>
-    </slot>
-</a>
+{#if isMounted}
+    <a
+        href={url}
+        on:mouseover={handleLinkHover}
+        on:touchstart={handleLinkHover}
+        on:click={handleLinkClick}
+    >
+        <slot>
+        </slot>
+    </a>
+{/if}
 
 <script>
     import { createEventDispatcher } from "svelte";
+    import { onMount } from "svelte";
 
-    export let url = "";    
+    export let url = "";
+
+    let isMounted = false;
+    onMount(() => {
+        isMounted = true;
+    });
 
     const dispatch = createEventDispatcher();
 
@@ -32,14 +40,11 @@
     a
     {
         text-decoration: none;
-        color: white;
-        font-family:  'Alegreya Sans SC', sans-serif;
-        font-size: 2em;
-        font-weight: 400;
+        display: inline-block;
     }
 
     a:visited
     {
-        color: white;
+        color: currentColor;
     }
 </style>
