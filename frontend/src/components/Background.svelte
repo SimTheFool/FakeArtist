@@ -1,19 +1,19 @@
 
 <div
     class="background-container"
-    use:appendStyle={() => ({
+    use:useStyleProperties={() => ({
         "--background-scale" : currentBackground ? `${currentBackground.scale}%` : "100%",
         "--background-offset-y" : currentBackground ? `${currentBackground.offsetY}%` : "0%",
         "--background-offset-x" : currentBackground ? `${currentBackground.offsetX}%` : "0%",
         "--background-brightness" : `${$brightness}%`,
         "--background-contrast" : currentBackground ? `${currentBackground.contrast}%` : "100%",
         "--background-blur" : `${$blur}px`,
+        "--lightbox-opacity" : `${$lightboxOpacity}`,
         "--lightbox-x" : currentBackground ? `${currentBackground.lightboxX}%` : "50%",
         "--lightbox-y" : currentBackground ? `${currentBackground.lightboxY}%` : "50%",
         "--lightbox-scale" : $lightboxScale,
         "--lightbox-color-begin" : currentBackground ? `${currentBackground.lightboxColor}` : "#000000",
-        "--lightbox-color-end" : currentBackground ? `${currentBackground.lightboxColor}00` : "#00000000",
-        "--lightbox-opacity" : `${$lightboxOpacity}`
+        "--lightbox-color-end" : currentBackground ? `${currentBackground.lightboxColor}00` : "#00000000"
     })}
 >
 
@@ -36,8 +36,9 @@
     import { linear } from 'svelte/easing';
     import { createMachine } from 'xstate';
     import { useMachine } from 'utils/useMachine.js';
-    import { appendStyle } from 'actions/appendStyle';
+    import { useStyleProperties } from 'actions/useStyleProperties';
     import { backgroundDatas } from "stores/background.js";
+    import { animSettings } from "settings";
 
     export let blured;
 
@@ -50,15 +51,15 @@
     let currentBlured = false;
 
     const tweeningOpt = {
-        duration: 1500,
+        duration: animSettings.stepDuration,
         easing: linear
-    }
+    };
     const brightness = tweened($backgroundDatas ? $backgroundDatas.brightness : 100, tweeningOpt);
-    const blur = tweened(blured ? 4 : 0, tweeningOpt);
+    const blur = tweened(currentBlured ? 4 : 0, tweeningOpt);
     const lightboxOpacity = tweened(0, tweeningOpt);
 
-    const animMachine = createMachine({
-        id: "animMachine",
+    const backgroundAnimMachine = createMachine({
+        id: "backgroundAnimMachine",
         context: {
             preload: null
         },
@@ -123,7 +124,7 @@
         }
     });
 
-    const { send } = useMachine(animMachine);
+    const { send } = useMachine(backgroundAnimMachine);
 
     $ : if(currentBackground != $backgroundDatas && isMounted)
     {
@@ -137,7 +138,7 @@
     }
 
     const lightboxScale = tweened(1, {
-        duration: 2000,
+        duration: animSettings.lightboxDuration,
         easing: linear
     });
 

@@ -1,16 +1,19 @@
-<nav class={navTop ? "nav-top" : ""}>
+<nav class={currentShouldNavTop ? "nav-top" : ""}
+    use:useStyleProperties={() => ({
+        "--text-opacity" : $textOpacity,
+        "--offset-x": `${$offsetX}px`
+    })}
+>
     <header>
-        <div class="logo-placeholder">
-            <div class="logo">
-                <Navlink on:linkhover={handleLinkHover} url="./">
-                    <img src="logo.svg" alt="logo Fake Artist">
-                </Navlink>
-            </div>
-        </div>
-        
-        <h1 class="title">
-            Fake Artist
-        </h1>
+        <Navlink on:linkhover={handleLinkHover} url="./">
+            <img class="logo" src="logo.svg" alt="logo Fake Artist">
+        </Navlink>
+
+        {#if !currentShouldNavTop}
+            <h1 class="title">
+                Fake Artist
+            </h1>
+        {/if}  
     </header>
 
     <ul>
@@ -21,10 +24,87 @@
 </nav>
 
 <script>
-    import Navlink from "components/Navlink.svelte";
+    import { onMount } from "svelte";
+    import { tweened } from "svelte/motion";
+    import { linear } from "svelte/easing";
 
-    export let navTop;
+    import Navlink from "components/Navlink.svelte";
+    import { animSettings } from "settings";
+    import { createMachine } from 'xstate';
+    import { useMachine } from 'utils/useMachine.js';
+    import { useStyleProperties } from 'actions/useStyleProperties';
+
+    export let shouldNavTop;
     export let handleLinkHover;
+
+    let isMounted = false;
+    onMount(() => {
+        isMounted = true;
+    });
+
+    const tweeningOpt = {
+        duration:  animSettings.stepDuration,
+        easing: linear
+    };
+
+    const textOpacity = tweened(0, tweeningOpt);
+    const offsetX = tweened(0, tweeningOpt);
+
+    const navAnimMachine = createMachine({
+        id: "navAnimMachine",
+        initial: "idle",
+        states:
+        {
+            idle:
+            {
+                on: { LAYOUT_CHANGE: "vanish" }
+            },
+            vanish:
+            {
+                invoke:
+                {
+                    src: "vanish",
+                    onDone: { target : "appear"}
+                }
+            },
+            appear:
+            {
+                invoke:
+                {
+                    src: "appear",
+                    onDone: { target : "idle"}
+                }
+            }
+        }
+    },{
+        services:
+        {
+            vanish: (ctx) => {
+                offsetX.set(50);
+                textOpacity.set(0);
+
+                return new Promise((res, rej) =>
+                {
+                    setTimeout(res, animSettings.stepDuration);
+                });
+            },
+            appear: (ctx) => {
+                currentShouldNavTop = shouldNavTop;
+                offsetX.set(0);
+                return textOpacity.set(1);
+            }      
+        }
+    });
+
+    const { send } = useMachine(navAnimMachine);
+
+    let currentShouldNavTop = null;
+
+    $ : if(currentShouldNavTop != shouldNavTop && isMounted)
+    {
+        send("LAYOUT_CHANGE");
+    }
+
 </script>
 
 <style>
@@ -63,17 +143,9 @@
 
     .logo
 	{
-		display: inline-block;
-		position: absolute;
-        bottom: 0;
-        right: 0;
-	}
-
-    .logo  img
-    {
-        max-width: 10vw;
+		max-width: 10vw;
         height: auto;
-    }
+	}
 
 	.title
 	{
@@ -108,6 +180,8 @@
 		text-align: right;
 		font-size: 1.1em;
 		font-weight: 400;
+        opacity: var(--text-opacity);
+        transform: translateX(var(--offset-x));
 	}
 
 	.nav-top
@@ -128,11 +202,6 @@
 	.nav-top header
 	{
 		margin-left: 2em;
-	}
-
-	.nav-top .logo
-	{
-		max-width: 7vw;
 	}
 
 	.nav-top ul

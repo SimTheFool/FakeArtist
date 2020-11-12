@@ -9,11 +9,11 @@ const dev = mode === 'development';
 
 const alias = { 
 	svelte: path.resolve('node_modules', 'svelte'),
-	anime: path.resolve('node_modules', 'animejs/lib/anime.es.js'),
 	components: path.resolve('src', 'components'),
 	stores: path.resolve('src', 'stores'),
 	utils: path.resolve('src', 'utils'),
-	actions: path.resolve('src', 'actions')
+	actions: path.resolve('src', 'actions'),
+	settings: path.resolve('src', 'settings.js')
 };
 const extensions = ['.mjs', '.js', '.json', '.svelte', '.html'];
 const mainFields = ['svelte', 'module', 'browser', 'main'];

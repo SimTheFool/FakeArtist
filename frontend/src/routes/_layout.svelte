@@ -2,7 +2,7 @@
 	<Background blured={blured}>
 		<slot></slot>
 	</Background>
-	<Navbar navTop={navTop} handleLinkHover={handleLinkHover}/>
+	<Navbar shouldNavTop={shouldNavTop} handleLinkHover={handleLinkHover}/>
 </main>
 
 <script context="module">
@@ -29,8 +29,8 @@
 	let blured = segment ? true : false;
 	$ : blured = segment ? true : false;
 
-	let navTop = segment ? true : false;
-	$ : navTop = segment ? true : false;
+	let shouldNavTop = segment ? true : false;
+	$ : shouldNavTop = segment ? true : false;
 
 	const handleLinkHover = (e) => {
 		let linkSegment = e.detail.url.slice(2);
