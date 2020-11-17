@@ -9,10 +9,14 @@ const fakeDB =
             offsetY : 0,
             brightness: 75,
             contrast: 250,
-            lightboxX: 55,
-            lightboxY: 100,
-            lightboxColor: "#ffedbc",
-            lightboxMaxScale: 1.6
+            color: "#ffedbc",
+            lightbox:
+            {
+                lightboxX: 55,
+                lightboxY: 100,
+                lightboxColor: "#ffedbc",
+                lightboxMaxScale: 1.6
+            }
         },
         "drawings": 
         {
@@ -21,10 +25,14 @@ const fakeDB =
             offsetY : 0,
             brightness: 50,
             contrast: 150,
-            lightboxX: 50,
-            lightboxY: 100,
-            lightboxColor: "#971513",
-            lightboxMaxScale: 1.5
+            color: "#995a5a",
+            lightbox:
+            {
+                lightboxX: 50,
+                lightboxY: 100,
+                lightboxColor: "#995a5a",
+                lightboxMaxScale: 1.5
+            }
         },
         "about": 
         {
@@ -33,10 +41,14 @@ const fakeDB =
             offsetY : 0,
             brightness: 50,
             contrast: 200,
-            lightboxX: 125,
-            lightboxY: 75,
-            lightboxColor: "#678510",
-            lightboxMaxScale: 1.6
+            color: "#678510",
+            lightbox:
+            {
+                lightboxX: 125,
+                lightboxY: 75,
+                lightboxColor: "#678510",
+                lightboxMaxScale: 1.6
+            }
         },
         "contact":
         {
@@ -45,10 +57,14 @@ const fakeDB =
             offsetY : 0,
             brightness: 75,
             contrast: 150,
-            lightboxX: 105,
-            lightboxY: 10,
-            lightboxColor: "#7d7d33",
-            lightboxMaxScale: 1.3
+            color: "#5e83ab",
+            lightbox:
+            {
+                lightboxX: 105,
+                lightboxY: 10,
+                lightboxColor: "#5e83ab",
+                lightboxMaxScale: 1.3
+            }
         }
     }
 };

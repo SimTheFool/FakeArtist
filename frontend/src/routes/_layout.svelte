@@ -2,7 +2,7 @@
 	<Background blured={blured}>
 		<slot></slot>
 	</Background>
-	<Navbar shouldNavTop={shouldNavTop} handleLinkHover={handleLinkHover}/>
+	<Navbar shouldNavTop={shouldNavTop && mobileLayout} handleLinkHover={handleLinkHover} segment={segment}/>
 </main>
 
 <script context="module">
@@ -17,6 +17,7 @@
 </script>
 
 <script>
+	import { onMount } from "svelte";
 	import Background from "components/Background.svelte";
 	import Navbar from "components/Navbar.svelte";
 	import {urlKey} from "stores/background.js";
@@ -31,6 +32,14 @@
 
 	let shouldNavTop = segment ? true : false;
 	$ : shouldNavTop = segment ? true : false;
+
+	let mobileLayout = false;
+	onMount(() => {
+		mobileLayout = (window.matchMedia("(min-width: 1280px)").matches) ? false : true;
+		window.addEventListener("orientationchange",(e) => { 
+			mobileLayout = window.matchMedia("(min-width: 1280px)").matches;
+		});
+	});
 
 	const handleLinkHover = (e) => {
 		let linkSegment = e.detail.url.slice(2);

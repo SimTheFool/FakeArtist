@@ -1,4 +1,4 @@
 export const animSettings = {
-    stepDuration: 750,
-    lightboxDuration: 1500
+    stepDuration: 650,
+    lightboxStepDuration: 1300
 };

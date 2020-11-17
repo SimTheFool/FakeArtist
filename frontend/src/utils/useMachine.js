@@ -1,7 +1,10 @@
 import { readable } from "svelte/store";
-import { interpret } from "xstate";
+import { createMachine, interpret } from "xstate";
 
-export const useMachine = (machine, options) => {
+export const useMachine = (machineStates, machineOptions, options) => {
+  
+  const machine = createMachine(machineStates, machineOptions);
+
   const service = interpret(machine, options);
 
   const store = readable(service.initialState, set => {
@@ -15,6 +18,7 @@ export const useMachine = (machine, options) => {
   return {
     state: store,
     send: service.send,
-    stop: service.stop
+    stop: service.stop,
+    ...machine.config.context,
   };
 }

@@ -1,12 +1,13 @@
-<nav class={currentShouldNavTop ? "nav-top" : ""}
-    use:useStyleProperties={() => ({
-        "--text-opacity" : $textOpacity,
-        "--offset-x": `${$offsetX}px`
-    })}
->
-    <header>
-        <Navlink on:linkhover={handleLinkHover} url="./">
-            <img class="logo" src="logo.svg" alt="logo Fake Artist">
+<nav class={currentShouldNavTop ? "nav-top" : ""}>
+    <header
+        use:useStyleProperties={() => ({
+            "--opacity": `${$headerOpacity}`
+        })}
+    >
+        <Navlink on:linkhover={handleLinkHover} url="./" selected={!segment}>
+            <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" preserveAspectRatio="xMidYMid meet" viewBox="100 100 465 534.3105269670394" class="logo">
+                <path d="M273.55 609.93C257.09 492.37 260.72 424.15 284.44 405.27C320.02 376.95 372.95 386.37 403.46 414.71C423.8 433.6 428.39 496.49 417.25 603.39C440.17 585.17 454.5 573.79 460.23 569.23C528.08 515.32 564.4 431 556.97 344.66C553.94 309.39 546.35 221.21 534.22 80.11C549.61 293.5 521.51 385.92 449.9 357.37C342.5 314.56 260.49 327.62 205.34 371.89C168.57 401.4 143.15 334.84 129.09 172.2C125.34 273.16 122.99 336.25 122.06 361.49C119.21 437.95 152.43 511.31 211.76 559.61C220 566.32 240.6 583.09 273.55 609.93Z" id="ctUB5IoKq"></path>
+            </svg>
         </Navlink>
 
         {#if !currentShouldNavTop}
@@ -17,9 +18,30 @@
     </header>
 
     <ul>
-        <li><Navlink on:linkhover={handleLinkHover} url="./drawings">Drawing</Navlink></li>
-        <li><Navlink on:linkhover={handleLinkHover} url="./about">About</Navlink></li>
-        <li><Navlink on:linkhover={handleLinkHover} url="./contact">Contact</Navlink></li>
+        <li
+            use:useStyleProperties={() => ({
+                "--opacity": `${$drawingOpacity}`,
+                "--offset-x": `${$drawingOffsetX}px`
+            })}
+        >
+            <Navlink on:linkhover={handleLinkHover} url="./drawings" selected={segment === "drawings"}>Drawing</Navlink>
+        </li>
+        <li
+            use:useStyleProperties={() => ({
+                "--opacity": `${$aboutOpacity}`,
+                "--offset-x": `${$aboutOffsetX}px`
+            })}
+        >
+            <Navlink on:linkhover={handleLinkHover} url="./about" selected={segment === "about"}>About</Navlink>
+        </li>
+        <li
+            use:useStyleProperties={() => ({
+                "--opacity": `${$contactOpacity}`,
+                "--offset-x": `${$contactOffsetX}px`
+            })}
+        >
+            <Navlink on:linkhover={handleLinkHover} url="./contact" selected={segment === "contact"}>Contact</Navlink>
+        </li>
     </ul>		
 </nav>
 
@@ -30,10 +52,10 @@
 
     import Navlink from "components/Navlink.svelte";
     import { animSettings } from "settings";
-    import { createMachine } from 'xstate';
     import { useMachine } from 'utils/useMachine.js';
     import { useStyleProperties } from 'actions/useStyleProperties';
 
+    export let segment;
     export let shouldNavTop;
     export let handleLinkHover;
 
@@ -42,16 +64,26 @@
         isMounted = true;
     });
 
+    let currentShouldNavTop = null;
+
     const tweeningOpt = {
-        duration:  animSettings.stepDuration,
+        duration:  animSettings.stepDuration / 2,
         easing: linear
     };
+    const maxOffsetX = 50;
 
-    const textOpacity = tweened(0, tweeningOpt);
-    const offsetX = tweened(0, tweeningOpt);
-
-    const navAnimMachine = createMachine({
+    const { send, headerOpacity, drawingOpacity, aboutOpacity, contactOpacity, drawingOffsetX, aboutOffsetX, contactOffsetX } = useMachine({
         id: "navAnimMachine",
+        context:
+        {
+            headerOpacity: tweened(0, {...tweeningOpt, duration: animSettings.stepDuration/4}),
+            drawingOpacity: tweened(0, {...tweeningOpt, delay: 1 / 8 * animSettings.stepDuration}),
+            aboutOpacity: tweened(0, {...tweeningOpt, delay: 2 / 8 * animSettings.stepDuration}),
+            contactOpacity: tweened(0, {...tweeningOpt, delay: 3 / 8 * animSettings.stepDuration}),
+            drawingOffsetX: tweened(0, {...tweeningOpt, delay: 1 / 8 * animSettings.stepDuration}),
+            aboutOffsetX: tweened(0, {...tweeningOpt, delay: 2 / 8 * animSettings.stepDuration}),
+            contactOffsetX: tweened(0, {...tweeningOpt, delay: 3 / 8 * animSettings.stepDuration})
+        },
         initial: "idle",
         states:
         {
@@ -76,12 +108,18 @@
                 }
             }
         }
-    },{
+    },
+    {
         services:
         {
             vanish: (ctx) => {
-                offsetX.set(50);
-                textOpacity.set(0);
+                ctx.headerOpacity.set(0);
+                ctx.drawingOpacity.set(0);
+                ctx.aboutOpacity.set(0);
+                ctx.contactOpacity.set(0);
+                ctx.drawingOffsetX.set(maxOffsetX);
+                ctx.aboutOffsetX.set(maxOffsetX);
+                ctx.contactOffsetX.set(maxOffsetX);
 
                 return new Promise((res, rej) =>
                 {
@@ -90,15 +128,17 @@
             },
             appear: (ctx) => {
                 currentShouldNavTop = shouldNavTop;
-                offsetX.set(0);
-                return textOpacity.set(1);
+
+                ctx.headerOpacity.set(1);
+                ctx.drawingOpacity.set(1);
+                ctx.aboutOpacity.set(1);
+                ctx.contactOpacity.set(1);
+                ctx.drawingOffsetX.set(0);
+                ctx.aboutOffsetX.set(0);
+                return ctx.contactOffsetX.set(0);
             }      
         }
     });
-
-    const { send } = useMachine(navAnimMachine);
-
-    let currentShouldNavTop = null;
 
     $ : if(currentShouldNavTop != shouldNavTop && isMounted)
     {
@@ -128,6 +168,8 @@
 		align-content: space-around;    
 		
 		padding: 0 1em 0 1em;
+
+        font-size: 1em;
 	}
 
 	header
@@ -139,12 +181,17 @@
 		flex-wrap: wrap;
 		justify-content: flex-end;
 		align-content: flex-start;
+
+        opacity: var(--opacity);
 	}
 
     .logo
 	{
-		max-width: 10vw;
+        display: block;
+		width: 1.85em;
         height: auto;
+
+        stroke-width: 20px;
 	}
 
 	.title
@@ -176,11 +223,11 @@
     {
         flex: 0 0 100%;
         white-space: nowrap;
-        padding: 0 0 1.5vh 0;
+        padding: 0 0 3vh 0;
 		text-align: right;
 		font-size: 1.1em;
 		font-weight: 400;
-        opacity: var(--text-opacity);
+        opacity: var(--opacity);
         transform: translateX(var(--offset-x));
 	}
 
@@ -197,11 +244,19 @@
 		flex-wrap: nowrap;
         justify-content: space-between;
 		align-content: flex-start;
+
+        font-size: 0.8em;
 	}
 
 	.nav-top header
 	{
 		margin-left: 2em;
+	}
+
+    .nav-top .logo
+    {
+		max-width: 7vw;
+        height: auto;
 	}
 
 	.nav-top ul

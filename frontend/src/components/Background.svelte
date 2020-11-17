@@ -2,18 +2,12 @@
 <div
     class="background-container"
     use:useStyleProperties={() => ({
-        "--background-scale" : currentBackground ? `${currentBackground.scale}%` : "100%",
-        "--background-offset-y" : currentBackground ? `${currentBackground.offsetY}%` : "0%",
-        "--background-offset-x" : currentBackground ? `${currentBackground.offsetX}%` : "0%",
-        "--background-brightness" : `${$brightness}%`,
-        "--background-contrast" : currentBackground ? `${currentBackground.contrast}%` : "100%",
-        "--background-blur" : `${$blur}px`,
-        "--lightbox-opacity" : `${$lightboxOpacity}`,
-        "--lightbox-x" : currentBackground ? `${currentBackground.lightboxX}%` : "50%",
-        "--lightbox-y" : currentBackground ? `${currentBackground.lightboxY}%` : "50%",
-        "--lightbox-scale" : $lightboxScale,
-        "--lightbox-color-begin" : currentBackground ? `${currentBackground.lightboxColor}` : "#000000",
-        "--lightbox-color-end" : currentBackground ? `${currentBackground.lightboxColor}00` : "#00000000"
+        "--scale" : currentBackground ? `${currentBackground.scale}%` : "100%",
+        "--offset-y" : currentBackground ? `${currentBackground.offsetY}%` : "0%",
+        "--brightness" : `${$brightness}%`,
+        "--contrast" : currentBackground ? `${currentBackground.contrast}%` : "100%",
+        "--blur" : `${$blur}px`,
+        "--lightbox-opacity" : `${$lightboxOpacity}`
     })}
 >
 
@@ -23,7 +17,9 @@
         alt="illustration"
         >
         <div class="shadow-frame"></div>
-        <div class="light-box"></div>
+        <div class="light-box">
+            <Lightbox lightboxDatas={currentBackground ? currentBackground.lightbox : null}/>
+        </div>
     </div>
 
     <slot></slot>
@@ -34,11 +30,11 @@
     import { onMount } from 'svelte';
     import { tweened } from 'svelte/motion';
     import { linear } from 'svelte/easing';
-    import { createMachine } from 'xstate';
     import { useMachine } from 'utils/useMachine.js';
     import { useStyleProperties } from 'actions/useStyleProperties';
     import { backgroundDatas } from "stores/background.js";
     import { animSettings } from "settings";
+    import Lightbox from 'components/Lightbox.svelte';
 
     export let blured;
 
@@ -54,14 +50,14 @@
         duration: animSettings.stepDuration,
         easing: linear
     };
-    const brightness = tweened($backgroundDatas ? $backgroundDatas.brightness : 100, tweeningOpt);
-    const blur = tweened(currentBlured ? 4 : 0, tweeningOpt);
-    const lightboxOpacity = tweened(0, tweeningOpt);
 
-    const backgroundAnimMachine = createMachine({
+    const { send, brightness, blur, lightboxOpacity } = useMachine({
         id: "backgroundAnimMachine",
         context: {
-            preload: null
+            preload: null,
+            brightness: tweened($backgroundDatas ? $backgroundDatas.brightness : 100, tweeningOpt),
+            blur: tweened(currentBlured ? 4 : 0, tweeningOpt),
+            lightboxOpacity: tweened(0, tweeningOpt)
         },
         initial: "idle",
         states:
@@ -96,16 +92,16 @@
                 ctx.preload = new Image();
                 ctx.preload.src = $backgroundDatas.src;
 
-                blur.set(4);
-                lightboxOpacity.set(0);
-                return brightness.set(0);
+                ctx.blur.set(4);
+                ctx.lightboxOpacity.set(0);
+                return ctx.brightness.set(0);
             },
             appear: (ctx) => {
                 const appear = () => {
                     currentBackground = $backgroundDatas;
-                    blur.set(blured ? 4 : 0);
-                    lightboxOpacity.set(1);
-                    return brightness.set(currentBackground.brightness);
+                    ctx.blur.set(blured ? 4 : 0);
+                    ctx.lightboxOpacity.set(1);
+                    return ctx.brightness.set(currentBackground.brightness);
                 };
 
                 if(ctx.preload && !ctx.preload.complete)
@@ -124,8 +120,6 @@
         }
     });
 
-    const { send } = useMachine(backgroundAnimMachine);
-
     $ : if(currentBackground != $backgroundDatas && isMounted)
     {
         send("BACKGROUND_CHANGE");
@@ -136,21 +130,6 @@
         currentBlured = blured;
         send("BLURED_CHANGE");
     }
-
-    const lightboxScale = tweened(1, {
-        duration: animSettings.lightboxDuration,
-        easing: linear
-    });
-
-    const growLightbox = () => {
-        lightboxScale.set($backgroundDatas ? $backgroundDatas.lightboxMaxScale : 1.5).then(shrinkLightbox);
-    };
-
-    const shrinkLightbox = () => {
-        lightboxScale.set(1).then(growLightbox);
-    };
-
-    growLightbox();
 </script>
 
 <style>
@@ -177,7 +156,7 @@
         height: 100%;
 
         overflow: hidden;
-        transform: scale(var(--background-scale)) translateY(var(--background-offset-y));
+        transform: scale(var(--scale)) translateY(var(--offset-y));
     }
 
     .shadow-frame
@@ -202,12 +181,6 @@
         height: 100%;
         width: 100%;
 
-        background: radial-gradient(
-            circle at var(--lightbox-x) var(--lightbox-y),
-            var(--lightbox-color-begin) 0%,
-            var(--lightbox-color-begin) calc(10% * var(--lightbox-scale)),
-            var(--lightbox-color-end) calc(25% * var(--lightbox-scale))
-        );
         opacity: var(--lightbox-opacity);
         mix-blend-mode: overlay;
     }
@@ -216,7 +189,7 @@
     {
         height: 100%;
         width: auto;
-        filter: grayscale(100%) contrast(var(--background-contrast)) brightness(var(--background-brightness)) blur(var(--background-blur));
+        filter: grayscale(100%) contrast(var(--contrast)) brightness(var(--brightness)) blur(var(--blur));
     }
 
     .background-img[src=""]
