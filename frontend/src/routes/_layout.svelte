@@ -1,6 +1,9 @@
 <main>
 	<Background blured={blured}>
-		<slot></slot>
+		<div id="content">
+			<slot>
+			</slot>
+		</div>
 	</Background>
 	<Navbar shouldNavTop={shouldNavTop && mobileLayout} handleLinkHover={handleLinkHover} segment={segment}/>
 </main>
@@ -33,7 +36,7 @@
 	let shouldNavTop = segment ? true : false;
 	$ : shouldNavTop = segment ? true : false;
 
-	let mobileLayout = false;
+	let mobileLayout = true;
 	onMount(() => {
 		mobileLayout = (window.matchMedia("(min-width: 1280px)").matches) ? false : true;
 		window.addEventListener("orientationchange",(e) => { 
@@ -58,4 +61,12 @@
 		font-family:  'Alegreya Sans SC', sans-serif;
 		font-size: 1.5em;
 	}
+
+	#content
+    {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        padding: 2em 1.2em 1em 1.2em;
+    }
 </style>

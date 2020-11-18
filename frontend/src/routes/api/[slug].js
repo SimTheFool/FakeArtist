@@ -66,7 +66,72 @@ const fakeDB =
                 lightboxMaxScale: 1.3
             }
         }
-    }
+    },
+    "about":
+    [
+        {
+            "title": "Lorem Ipsum",
+            "content" : "Dolor sit amet"
+        },
+        {
+            "title": "Ecce Gratum",
+            "content" : "tum, orci eget luctus elementum, mi ex gravida nisi, sed faucibus tellus lorem vitae lorem. Ut bibendum nisi arcu, eget tincidunt mi imperdiet id. Proin nec massa dui. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Mauris tristique nec arcu eu venenatis. Pellentesque commodo elit eu justo cursus, nec commodo dui porta. Sed dignissim urna sed felis molestie, a aliquam augue aliquet. Praesent facilisis sed velit eu rhoncus. Maecenas lacinia cursus nulla, ut vulputate felis porttitor eu. Sed porta risus nec pretium fringilla. Phasellus dignissim euismod ligula ac aliquam. Maecenas placerat tempus lectus et bibendum. Vivamus sagittis id erat non porta. Mauris faucibus magna eget tempor euismod."
+        }
+    ],
+    "drawings":
+    [
+        {
+            src : "background0.jpg"
+        },
+        {
+            src : "background0.jpg"
+        },
+        {
+            src : "background0.jpg"
+        },
+        {
+            src : "background0.jpg"
+        },
+        {
+            src : "background0.jpg"
+        },
+        {
+            src : "background0.jpg"
+        },
+        {
+            src : "background0.jpg"
+        },
+        {
+            src : "background0.jpg"
+        },
+        {
+            src : "background0.jpg"
+        },
+        {
+            src : "background0.jpg"
+        },
+        {
+            src : "background0.jpg"
+        },
+        {
+            src : "background0.jpg"
+        },
+        {
+            src : "background0.jpg"
+        },
+        {
+            src : "background0.jpg"
+        },
+        {
+            src : "background0.jpg"
+        },
+        {
+            src : "background0.jpg"
+        },
+        {
+            src : "background0.jpg"
+        }
+    ]
 };
 
 export function get(req, res, next)

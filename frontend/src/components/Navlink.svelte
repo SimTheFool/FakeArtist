@@ -1,4 +1,5 @@
     <a
+        rel=prefetch
         href={url}
         on:mouseover={handleLinkHover}
         on:touchstart={handleLinkHover}
