@@ -1,20 +1,20 @@
 <main>
-	<Background blured={blured}>
+	<Background>
 		<div id="content">
 			<slot>
 			</slot>
 		</div>
 	</Background>
-	<Navbar shouldNavTop={shouldNavTop && mobileLayout} handleLinkHover={handleLinkHover} segment={segment}/>
+	<Navbar/>
 </main>
 
 <script context="module">
-	import {backgroundsRegistry} from "stores/background.js";
+	import {setBackgrounds} from "stores/background.js";
 
     export async function preload(page, session) {
         const res = await this.fetch(`api/backgrounds`);
-		const backgrounds = await res.json();
-		backgroundsRegistry.set(backgrounds);
+		const datas = await res.json();
+		setBackgrounds(datas);
         return;
 	}
 </script>
@@ -23,31 +23,13 @@
 	import { onMount } from "svelte";
 	import Background from "components/Background.svelte";
 	import Navbar from "components/Navbar.svelte";
-	import {urlKey} from "stores/background.js";
 
 	export let segment;
 
-	urlKey.set(segment ? segment : "");
-	$ : urlKey.set(segment ? segment : "");
-	
-	let blured = segment ? true : false;
-	$ : blured = segment ? true : false;
-
-	let shouldNavTop = segment ? true : false;
-	$ : shouldNavTop = segment ? true : false;
-
-	let mobileLayout = true;
 	onMount(() => {
-		mobileLayout = (window.matchMedia("(min-width: 1280px)").matches) ? false : true;
-		window.addEventListener("orientationchange",(e) => { 
-			mobileLayout = window.matchMedia("(min-width: 1280px)").matches;
-		});
+		let link = document.querySelector(`#${segment ? segment : "home"}-nav-link`);
+		link.click();
 	});
-
-	const handleLinkHover = (e) => {
-		let linkSegment = e.detail.url.slice(2);
-		urlKey.set(linkSegment);
-	};
 </script>
 
 <style>

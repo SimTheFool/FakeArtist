@@ -1,8 +1,8 @@
-<div id="drawings">
+<!-- <div id="drawings">
     {#each elems as drawing}
         <img src={drawing.src} alt="some drawing">
     {/each}
-</div>
+</div> -->
 
 <script context="module">
     export async function preload(page, session) {

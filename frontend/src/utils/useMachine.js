@@ -17,8 +17,9 @@ export const useMachine = (machineStates, machineOptions, options) => {
 
   return {
     state: store,
+    service: service,
     send: service.send,
     stop: service.stop,
-    ...machine.config.context,
+    context: machine.config.context,
   };
 }

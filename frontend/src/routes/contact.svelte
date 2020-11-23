@@ -1,5 +1,5 @@
 
-<div id="contact">
+<!-- <div id="contact">
     <form on:submit|preventDefault={handleFormSubmit}>
         <label for="email">Votre adresse mail</label>
         <input id="email" class="form-elem" name="email" type="text">
@@ -9,7 +9,7 @@
     
         <button type="submit" class="form-elem">Envoyer</button>
     </form>
-</div>
+</div> -->
 
 <script>
     let handleFormSubmit = () => {};

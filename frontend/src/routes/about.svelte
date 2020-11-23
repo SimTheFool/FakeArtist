@@ -1,4 +1,4 @@
-<div id="about">
+<!-- <div id="about">
     {#each elems as article}
 
         <h2>{article.title}</h2>
@@ -19,7 +19,7 @@
         <p>{article.content}</p>
         
     {/each}
-</div>
+</div> -->
 
 <script context="module">
     export async function preload(page, session) {

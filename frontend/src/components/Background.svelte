@@ -2,10 +2,10 @@
 <div
     class="background-container"
     use:useStyleProperties={() => ({
-        "--scale" : currentBackground ? `${currentBackground.scale}%` : "100%",
-        "--offset-y" : currentBackground ? `${currentBackground.offsetY}%` : "0%",
+        "--scale" : currentBackgroundDatas ? `${currentBackgroundDatas.scale + $scale - 100}%` : "100%",
+        "--offset-y" : currentBackgroundDatas ? `${currentBackgroundDatas.offsetY}%` : "0%",
         "--brightness" : `${$brightness}%`,
-        "--contrast" : currentBackground ? `${currentBackground.contrast}%` : "100%",
+        "--contrast" : currentBackgroundDatas ? `${currentBackgroundDatas.contrast}%` : "100%",
         "--blur" : `${$blur}px`,
         "--lightbox-opacity" : `${$lightboxOpacity}`
     })}
@@ -13,12 +13,12 @@
 
     <div class="img-container">
         <img class="background-img"
-        src={currentBackground ? currentBackground.src : ""}
+        src={currentBackgroundDatas ? currentBackgroundDatas.src : ""}
         alt="illustration"
         >
         <div class="shadow-frame"></div>
         <div class="light-box">
-            <Lightbox lightboxDatas={currentBackground ? currentBackground.lightbox : null}/>
+            <Lightbox lightboxDatas={currentBackgroundDatas ? currentBackgroundDatas.lightbox : null}/>
         </div>
     </div>
 
@@ -26,109 +26,76 @@
 </div>
 
 <script>
-    import { onMount } from 'svelte';
-    import { tweened } from 'svelte/motion';
-    import { linear } from 'svelte/easing';
-    import { useMachine } from 'utils/useMachine.js';
+    import Lightbox from "components/Lightbox.svelte";
+
+    import { tweened } from "svelte/motion";
+    import { linear, quintIn, cubicIn, sineOut, cubicOut, quintOut} from "svelte/easing";
+
     import { useStyleProperties } from 'actions/useStyleProperties';
-    import { backgroundDatas } from "stores/background.js";
-    import { animSettings } from "settings";
-    import Lightbox from 'components/Lightbox.svelte';
+    import { backgrounds } from "stores/background.js"
+    import { subscribeOnVanish, subscribeOnAppear } from "machines/styleMachine.js";
+    import { subscribeOnEnter } from "machines/routeMachine.js";
 
-    export let blured;
+    let currentBackgroundDatas = null;
 
-    let isMounted = false;
-    onMount(() => {
-        isMounted = true;
+    let blur = tweened(0);
+    let minBlur = 0;
+    let brightness = tweened(0);
+    let lightboxOpacity = tweened(0);
+    let scale = tweened(103);
+    let maxScale = 102;
+
+    let preload = null;
+
+    subscribeOnVanish((state, ctx) => {
+        let tweeningOpt = { duration: ctx.stepDuration, easing: linear};
+
+        let preload = new Image();
+        preload.src = backgrounds[ctx.nextKey].src;
+
+        blur.set(4, tweeningOpt);
+        brightness.set(0, tweeningOpt);
+        lightboxOpacity.set(0, tweeningOpt);
+        scale.set(100, {...tweeningOpt, duration: 50, delay: ctx.stepDuration - 50});
     });
 
-    let currentBackground = null;
-    let currentBlured = false;
+    subscribeOnAppear((state, ctx) => {
+        const appear = () => {
+            let tweeningOpt = { duration: ctx.stepDuration, easing: linear};
 
-    const tweeningOpt = {
-        duration: animSettings.stepDuration,
-        easing: linear
-    };
+            currentBackgroundDatas = backgrounds[ctx.key];
+            blur.set(minBlur, tweeningOpt);
+            scale.set(maxScale, tweeningOpt);
+            brightness.set(currentBackgroundDatas.brightness, tweeningOpt);
+            lightboxOpacity.set(1, tweeningOpt);
+        };
 
-    const { send, brightness, blur, lightboxOpacity } = useMachine({
-        id: "backgroundAnimMachine",
-        context: {
-            preload: null,
-            brightness: tweened($backgroundDatas ? $backgroundDatas.brightness : 100, tweeningOpt),
-            blur: tweened(currentBlured ? 4 : 0, tweeningOpt),
-            lightboxOpacity: tweened(0, tweeningOpt)
-        },
-        initial: "idle",
-        states:
+        if(preload && !preload.complete)
         {
-            idle:
-            {   
-                on: { BACKGROUND_CHANGE: "vanish", BLURED_CHANGE: "appear" }
-            },
-            vanish:
-            {
-                invoke:
-                {
-                    src: "vanish",
-                    onDone: { target : "appear"}
-                }
-            },
-            appear:
-            {
-                invoke:
-                {
-                    src: "appear",
-                    onDone: { target : "idle"}
-                },
-                on: { BACKGROUND_CHANGE: "vanish", BLURED_CHANGE: "appear" }
-            }
+            preload.addEventListener('load', appear);
+            return;
         }
-    },
-    {
-        services:
-        {
-            vanish: (ctx) => {
-                ctx.preload = new Image();
-                ctx.preload.src = $backgroundDatas.src;
 
-                ctx.blur.set(4);
-                ctx.lightboxOpacity.set(0);
-                return ctx.brightness.set(0);
-            },
-            appear: (ctx) => {
-                const appear = () => {
-                    currentBackground = $backgroundDatas;
-                    ctx.blur.set(blured ? 4 : 0);
-                    ctx.lightboxOpacity.set(1);
-                    return ctx.brightness.set(currentBackground.brightness);
-                };
-
-                if(ctx.preload && !ctx.preload.complete)
-                {
-                    return new Promise((resolve, reject) => {
-                        ctx.preload.addEventListener('load', () => {
-                            appear().then(resolve());
-                        });
-                    });
-                }
-                else
-                {
-                    return appear();
-                }
-            }
-        }
+        appear();
     });
 
-    $ : if(currentBackground != $backgroundDatas && isMounted)
-    {
-        send("BACKGROUND_CHANGE");
-    }
+    subscribeOnEnter((state, ctx) => {
+        let tweeningOpt = { duration: ctx.stepDuration, easing: linear};
 
-    $ : if(currentBlured != blured && isMounted)
-    {
-        currentBlured = blured;
-        send("BLURED_CHANGE");
-    }
+        if(!ctx.url)
+        {
+            minBlur = 0;
+            maxScale = 100;
+        }
+        else
+        {
+            minBlur = 4;
+            maxScale = 102;
+        }
+
+        blur.set(minBlur, tweeningOpt);
+        scale.set(maxScale, tweeningOpt);
+    });
 </script>
 
 <style>

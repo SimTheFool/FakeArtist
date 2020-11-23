@@ -12,43 +12,22 @@
 <script>
     import { tweened } from 'svelte/motion';
     import { linear } from 'svelte/easing';
-    import { useMachine } from 'utils/useMachine.js';
     import { useStyleProperties } from 'actions/useStyleProperties';
     import { animSettings } from "settings";
 
     export let lightboxDatas;
 
-    const { lightboxScale } = useMachine({
-        id: "lightboxAnimMachine",
-        context:
-        {
-            lightboxScale: tweened(1, { duration: animSettings.lightboxStepDuration, easing: linear})
-        },
-        initial: "expand",
-        states:
-        {
-            expand:
-            {   
-                invoke: {src: "expand", onDone: { target : "shrink"}}
-            },
-            shrink:
-            {
-                invoke: {src: "shrink", onDone: { target : "expand"}}
-            }
-        }
-    },
-    {
-        services:
-        {
-            expand: (ctx) => {
-                return ctx.lightboxScale.set(lightboxDatas ? lightboxDatas.lightboxMaxScale : 1.5);
-            },
-            shrink: (ctx) => {
-                return ctx.lightboxScale.set(1);
-            }
-        }
-    });
+    let lightboxScale = tweened(1, { duration: animSettings.lightboxStepDuration, easing: linear});
 
+    const expand = () => {
+        lightboxScale.set(lightboxDatas ? lightboxDatas.lightboxMaxScale : 1.5).then(shrink);
+    };
+
+    const shrink = () => {
+        lightboxScale.set(1).then(expand);
+    };
+
+    expand();
 </script>
 
 

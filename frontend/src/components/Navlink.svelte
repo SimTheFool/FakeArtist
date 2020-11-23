@@ -1,12 +1,14 @@
     <a
+        id={`${url ? url : "home"}-nav-link`}
         rel=prefetch
-        href={url}
+        href={`./${url}`}
         on:mouseover={handleLinkHover}
         on:touchstart={handleLinkHover}
-        on:click={handleLinkClick}
-        class:selected={currentSelected}
+        on:mouseleave={handleLinkLeave}
+        on:click|preventDefault={handleLinkClick}
+        class:selected={selected}
         use:useStyleProperties={() => ({
-            "--color": `${currentSelectedColor}`,
+            "--color": `${selectedColor}`,
         })}
     >
         <slot>
@@ -14,91 +16,57 @@
     </a>
 
 <script>
-    import { tweened } from "svelte/motion";
-    import { createEventDispatcher } from "svelte";
+    import { goto } from '@sapper/app';
+
     import { useStyleProperties } from 'actions/useStyleProperties';
-    import { backgroundDatas } from "stores/background.js";
-    import { useMachine } from 'utils/useMachine.js';
-    import { animSettings } from "settings";
+    import { backgrounds } from "stores/background.js";
+    import { changeRoute, subscribeOnExit, subscribeOnEnter } from "machines/routeMachine.js";
+    import { changeStyle, subscribeOnVanish, subscribeOnAppear } from "machines/styleMachine.js";
 
     export let url = "";
-    export let selected = false;
 
-    const dispatch = createEventDispatcher();
+    let selected = false;
+    let selectedColor = "#ffffff";
+    
+    let linkHoverProcess = null;
+    const linkHoverTreshold = 200;
 
     const handleLinkHover = (e) => {
-        dispatch("linkhover", {
-            url : url
-        });
+        linkHoverProcess = setTimeout(() => {
+            changeStyle(url);
+        }, linkHoverTreshold);
+    };
+
+    const handleLinkLeave = (e) => {
+        clearTimeout(linkHoverProcess);
     };
 
     const handleLinkClick = (e) => {
-        dispatch("linkclick", {
-            url : url
+        changeRoute(url);
+
+        let unsubscribeOnEnter = subscribeOnEnter(() => {
+            goto(`./${url}`);
+            selected = true;
+            unsubscribeOnEnter();
         });
     };
 
-    let currentSelectedColor = "#ffffff";
-    let currentSelected = false;
+    let unsubscribeOnVanish = null;
 
-    const { send } = useMachine({
-        id: "linkAnimMachine",
-        initial: "idle",
-        context:
-        {
-            timer: tweened(0, {
-                duration: animSettings.stepDuration
-            })
-        },
-        states:
-        {
-            idle:
-            {   
-                on: { SELECTED_CHANGE: "selecting", BACKGROUND_CHANGE: "waiting" }
-            },
-            waiting:
-            {
-                invoke:
-                {
-                    src: "wait",
-                    onDone: { target : "selecting"}
-                },
-                on: { SELECTED_CHANGE: "selecting" }
-            },
-            selecting:
-            {
-                invoke:
-                {
-                    src: "select",
-                    onDone: { target : "idle"}
-                },
-                on: { SELECTED_CHANGE: "selecting" }
-            }
-        }
-    },
-    {
-        services:
-        {
-            wait: (ctx) => {
-                return ctx.timer.set(1);
-            },
-            select: (ctx) => {
-                currentSelected = selected;
-                currentSelectedColor = $backgroundDatas.color;
-                return ctx.timer.set(0);
-            }
-        }
+    subscribeOnExit((state, ctx) => {
+        selected = false;
+        let unsubscribeOnVanish = subscribeOnVanish((state, ctx) => {
+            selectedColor = backgrounds[ctx.nextKey].color;
+        });
     });
 
-    $ : if(currentSelected != selected)
-    {
-        send("SELECTED_CHANGE");
-    }
-
-    $ : if(currentSelectedColor != $backgroundDatas.color)
-    {
-        send("BACKGROUND_CHANGE");
-    }
+    subscribeOnAppear((state, ctx) => {
+        selectedColor = backgrounds[ctx.key].color;
+        if(unsubscribeOnVanish != null)
+        {
+            unsubscribeOnVanish();
+        }
+    });
 </script>
 
 <style>

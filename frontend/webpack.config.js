@@ -13,6 +13,7 @@ const alias = {
 	stores: path.resolve('src', 'stores'),
 	utils: path.resolve('src', 'utils'),
 	actions: path.resolve('src', 'actions'),
+	machines: path.resolve('src', 'machines'),
 	settings: path.resolve('src', 'settings.js')
 };
 const extensions = ['.mjs', '.js', '.json', '.svelte', '.html'];
