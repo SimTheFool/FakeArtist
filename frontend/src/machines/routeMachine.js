@@ -1,14 +1,16 @@
 import { useMachine } from 'utils/useMachine.js';
 import { createMachineSubscriber } from 'utils/createMachineSubscriber.js';
 import { animSettings } from "settings";
-import { changeStyle } from "machines/styleMachine";
+import { changeStyle, styleMachine } from "machines/styleMachine";
 
-const routeMachine = useMachine({
+export const routeMachine = useMachine({
     id: "routeMachine",
     context:
     {
         stepDuration: animSettings.stepDuration,
-        url: null
+        url: null,
+        nextUrl: null,
+        styleMachine: styleMachine
     },
     initial: "idle",
     states:
@@ -54,13 +56,13 @@ const routeMachine = useMachine({
     services:
     {
         exit: (ctx, event) => {
-            ctx.url = event.url;
-            changeStyle(ctx.url);
+            changeStyle(ctx.nextUrl);
             return new Promise((resolve, reject) => {
                 ctx.currentProcess = setTimeout(resolve, ctx.stepDuration);
             });
         },
         enter: (ctx, event) => {
+            ctx.url = ctx.nextUrl;
             return new Promise((resolve, reject) => {
                 ctx.currentProcess = setTimeout(resolve, ctx.stepDuration);
             });
@@ -69,13 +71,14 @@ const routeMachine = useMachine({
     guards:
     {
         areRoutesDifferent: (ctx, event) => {
-            return event.url != ctx.url;
+            return ctx.url != ctx.nextUrl;
         }
     }
 });
 
 export const changeRoute = (url) => {
-    routeMachine.send("ROUTE_CHANGE", { url: url});
+    routeMachine.context.nextUrl = url;
+    routeMachine.send("ROUTE_CHANGE");
 };
 
 export const subscribeOnExit = createMachineSubscriber(routeMachine, "exit");

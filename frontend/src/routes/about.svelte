@@ -1,25 +1,37 @@
-<!-- <div id="about">
-    {#each elems as article}
+<div id="about"
+    use:useStyleProperties={() => ({
+        "--opacity": `${$opacity}`,
+        "--color": `${color}`
+    })}
+>
+
+    <ScrollableElement>
+
+        {#each elems as article}
 
         <h2>{article.title}</h2>
         <p>{article.content}</p>
     
-    {/each}
+        {/each}
 
-    {#each elems as article}
+        {#each elems as article}
 
-        <h2>{article.title}</h2>
-        <p>{article.content}</p>
-        
-    {/each}
+            <h2>{article.title}</h2>
+            <p>{article.content}</p>
+            
+        {/each}
 
-    {#each elems as article}
+        {#each elems as article}
 
-        <h2>{article.title}</h2>
-        <p>{article.content}</p>
-        
-    {/each}
-</div> -->
+            <h2>{article.title}</h2>
+            <p>{article.content}</p>
+            
+        {/each}
+
+    </ScrollableElement>
+
+
+</div>
 
 <script context="module">
     export async function preload(page, session) {
@@ -30,7 +42,39 @@
 </script>
 
 <script>
+    import { onDestroy } from "svelte";
+    import { tweened } from "svelte/motion";
+
+    import ScrollableElement from "components/ScrollableElement.svelte";
+
+    import { useStyleProperties } from "actions/useStyleProperties.js";
+    import { subscribeOnVanish } from "machines/styleMachine.js";
+    import { subscribeOnExit, subscribeOnEnter } from "machines/routeMachine.js";
+    import { backgrounds } from "stores/background.js";
+
     export let elems;
+
+    let opacity = tweened(0);
+    let color = "#ffffff";
+
+    const unsubscribeOnVanish = subscribeOnVanish((state, ctx) => {
+        color = backgrounds[ctx.nextKey].color;
+    });
+
+    const unsubscribeOnExit = subscribeOnExit((state, ctx) => {
+        opacity.set(0, {duration: ctx.stepDuration});
+    });
+
+    const unsubscribeOnEnter = subscribeOnEnter((state, ctx) => {
+        opacity.set(1, {duration: ctx.stepDuration});
+        color = backgrounds[ctx.styleMachine.context.key].color;
+    });
+
+    onDestroy(() => {
+        unsubscribeOnVanish();
+        unsubscribeOnExit();
+        unsubscribeOnEnter();
+    });
 </script>
 
 <style>
@@ -38,13 +82,18 @@
     {
         width: 100%;
         height: 100%;
-        overflow: auto;
+        opacity: var(--opacity);
     }
 
     h2
     {
         font-size: 1em;
         margin: 1em 0 0.25em 0;
+    }
+
+    h2:first-of-type
+    {
+        margin-top: 0.5em;
     }
 
     p

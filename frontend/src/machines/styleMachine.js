@@ -2,7 +2,7 @@ import { useMachine } from 'utils/useMachine.js';
 import { createMachineSubscriber } from 'utils/createMachineSubscriber.js';
 import { animSettings } from "settings";
 
-const styleMachine = useMachine({
+export const styleMachine = useMachine({
     id: "styleMachine",
     context:
     {

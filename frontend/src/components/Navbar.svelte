@@ -74,6 +74,7 @@
     const contactOffsetX = tweened(16);
 
     const transitNavBar = (opacity, offsetX, stepDuration) => {
+
         let tweeningOpt = { duration: stepDuration * 2 / 3, easing: linear};
         headerOpacity.set(opacity, tweeningOpt);
         
@@ -91,7 +92,7 @@
     };
 
     subscribeOnExit((state, ctx) => {
-        let newShouldNavTop = ctx.url ? true : false;
+        let newShouldNavTop = ctx.nextUrl ? true : false;
         if(newShouldNavTop != shouldNavTop)
         {
             transitNavBar(0, 16, ctx.stepDuration);

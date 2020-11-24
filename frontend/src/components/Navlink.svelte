@@ -29,7 +29,7 @@
     let selectedColor = "#ffffff";
     
     let linkHoverProcess = null;
-    const linkHoverTreshold = 200;
+    const linkHoverTreshold = 300;
 
     const handleLinkHover = (e) => {
         linkHoverProcess = setTimeout(() => {
@@ -40,13 +40,16 @@
     const handleLinkLeave = (e) => {
         clearTimeout(linkHoverProcess);
     };
-
+    
     const handleLinkClick = (e) => {
         changeRoute(url);
 
-        let unsubscribeOnEnter = subscribeOnEnter(() => {
-            goto(`./${url}`);
-            selected = true;
+        let unsubscribeOnEnter = subscribeOnEnter((state, ctx) => {
+            goto(`./${ctx.url}`);
+            if(ctx.url == url)
+            {
+                selected = true;
+            }
             unsubscribeOnEnter();
         });
     };

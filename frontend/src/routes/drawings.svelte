@@ -1,8 +1,12 @@
-<!-- <div id="drawings">
-    {#each elems as drawing}
-        <img src={drawing.src} alt="some drawing">
-    {/each}
-</div> -->
+<div id="drawings">
+    <ScrollableElement>
+        <div id="drawings-grid">
+            {#each elems as drawing}
+                <img src={drawing.src} alt="some drawing">
+            {/each}
+        </div>
+    </ScrollableElement>
+</div>
 
 <script context="module">
     export async function preload(page, session) {
@@ -13,21 +17,34 @@
 </script>
 
 <script>
+    import { onMount } from "svelte";
+    import ScrollableElement from "components/ScrollableElement.svelte";
+
     export let elems;
+
+    onMount(() => {
+        
+    });
 </script>
 
 <style>
 
     #drawings
     {
+        width: 100%;
+        height: 100%;
+    }
+
+    #drawings-grid
+    {
         display: grid;
         width: 100%;
         height: 100%;
 
-        grid-template-columns: repeat(3, 15vw);
-        grid-auto-rows: 20vh;
+        grid-template-columns: repeat(3, 15vmin);
+        grid-auto-rows: 20vmin;
         grid-auto-flow: row;
-        row-gap: 1em;
+        row-gap: 2em;
 
         justify-content: space-around;
 
