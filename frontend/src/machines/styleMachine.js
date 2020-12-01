@@ -1,5 +1,4 @@
-import { useMachine } from 'utils/useMachine.js';
-import { createMachineSubscriber } from 'utils/createMachineSubscriber.js';
+import { useMachine, createMachineSubscriber } from 'machines/utils.js';
 import { animSettings } from "settings";
 
 export const styleMachine = useMachine({

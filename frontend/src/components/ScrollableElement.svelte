@@ -45,6 +45,11 @@
 </script>
 
 <style>
+    *
+    {
+        position: unset;
+    }
+
     .scrollable-element
     {
         display: block;
@@ -71,11 +76,14 @@
 
         position: sticky;
         transition: color 0.5s linear;
+
+        pointer-events: none;
     }
 
     .scroll span
     {
         cursor: pointer;
+        pointer-events: auto;
     }
 
     .scroll-top

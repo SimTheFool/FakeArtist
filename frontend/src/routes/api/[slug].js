@@ -81,55 +81,40 @@ const fakeDB =
     "drawings":
     [
         {
-            src : "background0.jpg"
+            src : "drawing1.jpg"
         },
         {
-            src : "background0.jpg"
+            src : "drawing2.jpg"
         },
         {
-            src : "background0.jpg"
+            src : "drawing3.jpg"
         },
         {
-            src : "background0.jpg"
+            src : "drawing4.jpg"
         },
         {
-            src : "background0.jpg"
+            src : "drawing5.jpg"
         },
         {
-            src : "background0.jpg"
+            src : "drawing6.jpg"
         },
         {
-            src : "background0.jpg"
+            src : "drawing1.jpg"
         },
         {
-            src : "background0.jpg"
+            src : "drawing2.jpg"
         },
         {
-            src : "background0.jpg"
+            src : "drawing3.jpg"
         },
         {
-            src : "background0.jpg"
+            src : "drawing4.jpg"
         },
         {
-            src : "background0.jpg"
+            src : "drawing5.jpg"
         },
         {
-            src : "background0.jpg"
-        },
-        {
-            src : "background0.jpg"
-        },
-        {
-            src : "background0.jpg"
-        },
-        {
-            src : "background0.jpg"
-        },
-        {
-            src : "background0.jpg"
-        },
-        {
-            src : "background0.jpg"
+            src : "drawing6.jpg"
         }
     ]
 };
