@@ -91,6 +91,11 @@
 <style>
     .drawing
     {
+        display: flex;
+        justify-content: center;
+        align-content: center;
+        align-items: center;
+
         width: 100%;
         height: 100%;
         opacity: 1;
@@ -118,6 +123,11 @@
         font-size: 0;
         transform: scale(1);
         filter: grayscale(0.3) contrast(150%) brightness(80%);
+    }
+
+    .drawing-expanded :global(img)
+    {
+        box-shadow: none;
     }
 
     .drawing-expanded:hover

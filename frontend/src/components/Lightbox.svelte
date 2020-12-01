@@ -11,20 +11,22 @@
 
 <script>
     import { tweened } from 'svelte/motion';
-    import { linear } from 'svelte/easing';
+    import { linear, cubicOut } from 'svelte/easing';
     import { useStyleProperties } from 'actions/useStyleProperties';
     import { animSettings } from "settings";
 
     export let lightboxDatas;
 
-    let lightboxScale = tweened(1, { duration: animSettings.lightboxStepDuration, easing: linear});
+    let lightboxScale = tweened(1, { duration: animSettings.lightboxStepDuration});
 
     const expand = () => {
-        lightboxScale.set(lightboxDatas ? lightboxDatas.lightboxMaxScale : 1.5).then(shrink);
+        lightboxScale.set(lightboxDatas ? lightboxDatas.lightboxMaxScale : 1.5, {easing: cubicOut}).then(() => {
+            setTimeout(shrink, animSettings.lightboxStepDuration);
+        });
     };
 
     const shrink = () => {
-        lightboxScale.set(1).then(expand);
+        lightboxScale.set(1, {easing: linear}).then(expand);
     };
 
     expand();

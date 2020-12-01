@@ -13,9 +13,9 @@ const fakeDB =
             lightbox:
             {
                 lightboxX: 55,
-                lightboxY: 100,
+                lightboxY: 105,
                 lightboxColor: "#ffedbc",
-                lightboxMaxScale: 1.6
+                lightboxMaxScale: 1.65
             }
         },
         "drawings": 
@@ -29,9 +29,9 @@ const fakeDB =
             lightbox:
             {
                 lightboxX: 50,
-                lightboxY: 100,
-                lightboxColor: "#995a5a",
-                lightboxMaxScale: 1.5
+                lightboxY: 105,
+                lightboxColor: "#eb3f3f",
+                lightboxMaxScale: 1.8
             }
         },
         "about": 
@@ -46,7 +46,7 @@ const fakeDB =
             {
                 lightboxX: 125,
                 lightboxY: 75,
-                lightboxColor: "#678510",
+                lightboxColor: "#a0cd18",
                 lightboxMaxScale: 1.6
             }
         },
@@ -60,10 +60,10 @@ const fakeDB =
             color: "#5e83ab",
             lightbox:
             {
-                lightboxX: 105,
+                lightboxX: 110,
                 lightboxY: 10,
-                lightboxColor: "#5e83ab",
-                lightboxMaxScale: 1.3
+                lightboxColor: "#5c85d6",
+                lightboxMaxScale: 1.6
             }
         }
     },
