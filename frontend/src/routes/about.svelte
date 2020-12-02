@@ -1,8 +1,8 @@
 <div id="about"
-    use:useStyleProperties={() => ({
-        "--opacity": `${$opacity}`,
-        "--color": `${color}`
-    })}
+    style={`
+        --opacity: ${$opacity};
+        --color: ${color};
+    `}
 >
 
     <ScrollableElement>
@@ -47,7 +47,6 @@
 
     import ScrollableElement from "components/ScrollableElement.svelte";
 
-    import { useStyleProperties } from "actions/useStyleProperties.js";
     import { subscribeOnVanish } from "machines/styleMachine.js";
     import { subscribeOnExit, subscribeOnEnter } from "machines/routeMachine.js";
     import { backgrounds } from "stores/background.js";

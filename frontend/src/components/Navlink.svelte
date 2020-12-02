@@ -2,14 +2,12 @@
         id={`${url ? url : "home"}-nav-link`}
         rel=prefetch
         href={`./${url}`}
+        class:selected={selected}
+        style={`--color: ${selectedColor}`}
         on:mouseover={handleLinkHover}
         on:touchstart={handleLinkHover}
         on:mouseleave={handleLinkLeave}
         on:click|preventDefault={handleLinkClick}
-        class:selected={selected}
-        use:useStyleProperties={() => ({
-            "--color": `${selectedColor}`,
-        })}
     >
         <slot>
         </slot>
@@ -18,7 +16,6 @@
 <script>
     import { goto } from '@sapper/app';
 
-    import { useStyleProperties } from 'actions/useStyleProperties';
     import { backgrounds } from "stores/background.js";
     import { changeRoute, subscribeOnExit, subscribeOnEnter } from "machines/routeMachine.js";
     import { changeStyle, subscribeOnVanish, subscribeOnAppear } from "machines/styleMachine.js";

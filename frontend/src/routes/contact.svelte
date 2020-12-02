@@ -1,9 +1,9 @@
 
 <div id="contact"
-    use:useStyleProperties={() => ({
-        "--color": `${color}`,
-        "--opacity": `${$opacity}`
-    })}
+    style={`
+        --color: ${color};
+        --opacity: ${$opacity};
+    `}
 >
     <form on:submit|preventDefault={handleFormSubmit}>
         <label for="email">Votre adresse mail</label>
@@ -22,7 +22,6 @@
 
     import { subscribeOnVanish } from "machines/styleMachine.js";
     import { subscribeOnExit, subscribeOnEnter } from "machines/routeMachine.js";
-    import { useStyleProperties } from "actions/useStyleProperties.js";
     import { backgrounds } from "stores/background.js";
 
     let color = "#ffffff00";

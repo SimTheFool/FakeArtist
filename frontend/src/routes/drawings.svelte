@@ -1,8 +1,8 @@
 <div id="drawings"
-    use:useStyleProperties={() => ({
-        "--opacity": `${$opacity}`,
-        "--color": `${color}`
-    })}
+    style={`
+        --opacity: ${$opacity};
+        --color: ${color};
+    `}
 >
     <ScrollableElement>
         <div id="drawings-grid">
@@ -27,8 +27,7 @@
 
     import ScrollableElement from "components/ScrollableElement.svelte";
     import Drawing from "components/Drawing.svelte";
-
-    import { useStyleProperties } from "actions/useStyleProperties.js";
+    
     import { subscribeOnVanish } from "machines/styleMachine.js";
     import { subscribeOnExit, subscribeOnEnter } from "machines/routeMachine.js";
     import { backgrounds } from "stores/background.js";

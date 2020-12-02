@@ -1,18 +1,18 @@
 <div
-    use:useStyleProperties={() => ({
-        "--lightbox-x" : lightboxDatas ? `${lightboxDatas.lightboxX}%` : "50%",
-        "--lightbox-y" : lightboxDatas ? `${lightboxDatas.lightboxY}%` : "50%",
-        "--lightbox-scale" : $lightboxScale,
-        "--lightbox-color-begin" : lightboxDatas ? `${lightboxDatas.lightboxColor}` : "#000000",
-        "--lightbox-color-end" : lightboxDatas ? `${lightboxDatas.lightboxColor}00` : "#00000000"
-    })}
+
+    style= {`--lightbox-x: ${lightboxDatas ? `${lightboxDatas.lightboxX}%` : "50%"};
+        --lightbox-y: ${lightboxDatas ? `${lightboxDatas.lightboxY}%` : "50%"};
+        --lightbox-scale: ${$lightboxScale};
+        --lightbox-color-begin: ${lightboxDatas ? `${lightboxDatas.lightboxColor}` : "#000"};
+        --lightbox-color-end: ${lightboxDatas ? `${lightboxDatas.lightboxColor}00` : "#0000"};
+    `}
+    
 >
 </div>
 
 <script>
     import { tweened } from 'svelte/motion';
     import { linear, cubicOut } from 'svelte/easing';
-    import { useStyleProperties } from 'actions/useStyleProperties';
     import { animSettings } from "settings";
 
     export let lightboxDatas;
@@ -21,7 +21,7 @@
 
     const expand = () => {
         lightboxScale.set(lightboxDatas ? lightboxDatas.lightboxMaxScale : 1.5, {easing: cubicOut}).then(() => {
-            setTimeout(shrink, animSettings.lightboxStepDuration);
+            setTimeout(shrink, animSettings.lightboxStepDuration*2);
         });
     };
 
@@ -36,6 +36,7 @@
 <style>
     div
     {
+        will-change: background;
         width: 100%;
         height: 100%;
         background: radial-gradient(

@@ -1,9 +1,5 @@
 <nav class={(shouldNavTop && mobileLayout) ? "nav-top" : ""}>
-    <header
-        use:useStyleProperties={() => ({
-            "--opacity": `${$headerOpacity}`
-        })}
-    >
+    <header style={`--opacity: ${$headerOpacity}`}>
         <Navlink url="">
             <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" preserveAspectRatio="xMidYMid meet" viewBox="100 100 465 534.3105269670394" class="logo">
                 <path d="M273.55 609.93C257.09 492.37 260.72 424.15 284.44 405.27C320.02 376.95 372.95 386.37 403.46 414.71C423.8 433.6 428.39 496.49 417.25 603.39C440.17 585.17 454.5 573.79 460.23 569.23C528.08 515.32 564.4 431 556.97 344.66C553.94 309.39 546.35 221.21 534.22 80.11C549.61 293.5 521.51 385.92 449.9 357.37C342.5 314.56 260.49 327.62 205.34 371.89C168.57 401.4 143.15 334.84 129.09 172.2C125.34 273.16 122.99 336.25 122.06 361.49C119.21 437.95 152.43 511.31 211.76 559.61C220 566.32 240.6 583.09 273.55 609.93Z" id="ctUB5IoKq"></path>
@@ -18,28 +14,22 @@
     </header>
 
     <ul>
-        <li
-            use:useStyleProperties={() => ({
-                "--opacity": `${$drawingOpacity}`,
-                "--offset-x": `${$drawingOffsetX}px`
-            })}
-        >
+        <li style={`
+            --opacity: ${$drawingOpacity};
+            --offset-x: ${$drawingOffsetX}px;
+        `}>
             <Navlink url="drawings">Drawing</Navlink>
         </li>
-        <li
-            use:useStyleProperties={() => ({
-                "--opacity": `${$aboutOpacity}`,
-                "--offset-x": `${$aboutOffsetX}px`
-            })}
-        >
+        <li style={`
+            --opacity: ${$aboutOpacity};
+            --offset-x: ${$aboutOffsetX}px;
+        `}>
             <Navlink url="about">About</Navlink>
         </li>
-        <li
-            use:useStyleProperties={() => ({
-                "--opacity": `${$contactOpacity}`,
-                "--offset-x": `${$contactOffsetX}px`
-            })}
-        >
+        <li style={`
+            --opacity: ${$contactOpacity};
+            --offset-x: ${$contactOffsetX}px;
+        `}>
             <Navlink url="contact">Contact</Navlink>
         </li>
     </ul>		
@@ -52,7 +42,6 @@
 
     import Navlink from "components/Navlink.svelte";
 
-    import { useStyleProperties } from 'actions/useStyleProperties';
     import { subscribeOnExit, subscribeOnEnter } from "machines/routeMachine.js";
 
     let shouldNavTop = false;

@@ -1,14 +1,14 @@
 
 <div
     class="background-container"
-    use:useStyleProperties={() => ({
-        "--scale" : currentBackgroundDatas ? `${currentBackgroundDatas.scale + $scale - 100}%` : "100%",
-        "--offset-y" : currentBackgroundDatas ? `${currentBackgroundDatas.offsetY}%` : "0%",
-        "--brightness" : `${$brightness}%`,
-        "--contrast" : currentBackgroundDatas ? `${currentBackgroundDatas.contrast}%` : "100%",
-        "--blur" : `${$blur}px`,
-        "--lightbox-opacity" : `${$lightboxOpacity}`
-    })}
+    style={`
+        --scale: ${currentBackgroundDatas ? currentBackgroundDatas.scale + $scale - 100 : 100}%;
+        --offset-y: ${currentBackgroundDatas ? currentBackgroundDatas.offsetY : 0}%;
+        --brightness: ${$brightness}%;
+        --contrast: ${currentBackgroundDatas ? currentBackgroundDatas.contrast : 100}%;
+        --blur: ${$blur}px;
+        --lightbox-opacity: ${$lightboxOpacity}
+    `}   
 >
 
     <div class="img-container">
@@ -29,9 +29,8 @@
     import Lightbox from "components/Lightbox.svelte";
 
     import { tweened } from "svelte/motion";
-    import { linear, quintIn, cubicIn, sineOut, cubicOut, quintOut} from "svelte/easing";
+    import { linear } from "svelte/easing";
 
-    import { useStyleProperties } from 'actions/useStyleProperties';
     import { backgrounds } from "stores/background.js"
     import { subscribeOnVanish, subscribeOnAppear } from "machines/styleMachine.js";
     import { subscribeOnEnter } from "machines/routeMachine.js";
