@@ -76,15 +76,23 @@
         width: 100%;
         height: 100%;
 
-        grid-template-columns: repeat(2, 30vmin);
+        grid-template-columns: repeat(2, 30vw);
         grid-auto-rows: 50vmin;
         grid-auto-flow: row;
         row-gap: 2em;
 
-        padding: 0.3em;
+        padding: 1em;
 
         justify-content: space-around;
 
         overflow: hidden;
     }
+
+    @media (min-width: 960px)
+    {
+        #drawings-grid
+        {
+            grid-template-columns: repeat(3, 20vw);
+        }
+	}
 </style>

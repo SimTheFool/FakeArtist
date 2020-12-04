@@ -1,6 +1,7 @@
 <div
 
-    style= {`--lightbox-x: ${lightboxDatas ? `${lightboxDatas.lightboxX}%` : "50%"};
+    style= {`
+        --lightbox-x: ${lightboxDatas ? `${lightboxDatas.lightboxX}%` : "50%"};
         --lightbox-y: ${lightboxDatas ? `${lightboxDatas.lightboxY}%` : "50%"};
         --lightbox-scale: ${$lightboxScale};
         --lightbox-color-begin: ${lightboxDatas ? `${lightboxDatas.lightboxColor}` : "#000"};
@@ -11,25 +12,38 @@
 </div>
 
 <script>
+    import { onDestroy } from "svelte";
     import { tweened } from 'svelte/motion';
     import { linear, cubicOut } from 'svelte/easing';
     import { animSettings } from "settings";
+    import { subscribeOnVanish, subscribeOnIdle } from "machines/styleMachine.js";
 
     export let lightboxDatas;
 
-    let lightboxScale = tweened(1, { duration: animSettings.lightboxStepDuration});
+    const lightboxScale = tweened(1, { duration: animSettings.lightboxStepDuration});
 
     const expand = () => {
-        lightboxScale.set(lightboxDatas ? lightboxDatas.lightboxMaxScale : 1.5, {easing: cubicOut}).then(() => {
-            setTimeout(shrink, animSettings.lightboxStepDuration*2);
-        });
+        lightboxScale.set(lightboxDatas ? lightboxDatas.lightboxMaxScale : 1.5, {easing: cubicOut}).then(shrink);
     };
 
     const shrink = () => {
-        lightboxScale.set(1, {easing: linear}).then(expand);
+        lightboxScale.set(1, {easing: linear, delay: animSettings.lightboxStepDuration*2}).then(expand);
     };
 
+    let unsubscribeOnVanish = subscribeOnVanish(() => {
+        lightboxScale.set($lightboxScale, {duration: 0});
+    });
+
+    let unsubscribeOnIdle = subscribeOnIdle(() => {
+        expand();
+    });
+
     expand();
+
+    onDestroy(() => {
+        unsubscribeOnVanish();
+        unsubscribeOnIdle();
+    });
 </script>
 
 

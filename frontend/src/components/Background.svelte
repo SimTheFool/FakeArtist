@@ -2,12 +2,13 @@
 <div
     class="background-container"
     style={`
-        --scale: ${currentBackgroundDatas ? currentBackgroundDatas.scale + $scale - 100 : 100}%;
-        --offset-y: ${currentBackgroundDatas ? currentBackgroundDatas.offsetY : 0}%;
-        --brightness: ${$brightness}%;
+        --duration: ${animSettings.stepDuration}ms;
+        --scale: ${currentBackgroundDatas ? currentBackgroundDatas.scale : 1};
+        --offset-y: ${currentBackgroundDatas ? currentBackgroundDatas.offsetY : 0};
+        --brightness: ${brightness}%;
         --contrast: ${currentBackgroundDatas ? currentBackgroundDatas.contrast : 100}%;
-        --blur: ${$blur}px;
-        --lightbox-opacity: ${$lightboxOpacity}
+        --blur: ${blur}px;
+        --lightbox-opacity: ${lightboxOpacity};
     `}   
 >
 
@@ -26,47 +27,39 @@
 </div>
 
 <script>
-    import Lightbox from "components/Lightbox.svelte";
 
-    import { tweened } from "svelte/motion";
-    import { linear } from "svelte/easing";
+    import Lightbox from "components/Lightbox.svelte";
 
     import { backgrounds } from "stores/background.js"
     import { subscribeOnVanish, subscribeOnAppear } from "machines/styleMachine.js";
     import { subscribeOnEnter } from "machines/routeMachine.js";
+    import { animSettings } from "settings";
 
     let currentBackgroundDatas = null;
 
-    let blur = tweened(0);
+    let blur = 0;
     let minBlur = 0;
-    let brightness = tweened(0);
-    let lightboxOpacity = tweened(0);
-    let scale = tweened(103);
-    let maxScale = 102;
+    let brightness = 0;
+    let lightboxOpacity = 0;
 
     let preload = null;
 
     subscribeOnVanish((state, ctx) => {
-        let tweeningOpt = { duration: ctx.stepDuration, easing: linear};
-
         let preload = new Image();
         preload.src = backgrounds[ctx.nextKey].src;
 
-        blur.set(4, tweeningOpt);
-        brightness.set(0, tweeningOpt);
-        lightboxOpacity.set(0, tweeningOpt);
-        scale.set(100, {...tweeningOpt, duration: 50, delay: ctx.stepDuration - 50});
+        blur = 4;
+        brightness = 0;
+        lightboxOpacity = 0;
     });
 
     subscribeOnAppear((state, ctx) => {
         const appear = () => {
-            let tweeningOpt = { duration: ctx.stepDuration, easing: linear};
-
             currentBackgroundDatas = backgrounds[ctx.key];
-            blur.set(minBlur, tweeningOpt);
-            scale.set(maxScale, tweeningOpt);
-            brightness.set(currentBackgroundDatas.brightness, tweeningOpt);
-            lightboxOpacity.set(1, tweeningOpt);
+
+            blur = minBlur;
+            brightness = currentBackgroundDatas.brightness;
+            lightboxOpacity = 1;
         };
 
         if(preload && !preload.complete)
@@ -79,21 +72,17 @@
     });
 
     subscribeOnEnter((state, ctx) => {
-        let tweeningOpt = { duration: ctx.stepDuration, easing: linear};
 
         if(!ctx.url)
         {
             minBlur = 0;
-            maxScale = 100;
         }
         else
         {
             minBlur = 4;
-            maxScale = 102;
         }
 
-        blur.set(minBlur, tweeningOpt);
-        scale.set(maxScale, tweeningOpt);
+        blur = minBlur;
     });
 </script>
 
@@ -122,6 +111,9 @@
 
         overflow: hidden;
         transform: scale(var(--scale)) translateY(var(--offset-y));
+        filter:  blur(var(--blur));
+        transition: filter var(--duration) linear;
+        
     }
 
     .shadow-frame
@@ -147,6 +139,7 @@
         width: 100%;
 
         opacity: var(--lightbox-opacity);
+        transition: opacity var(--duration) linear;
         mix-blend-mode: overlay;
     }
 
@@ -154,7 +147,8 @@
     {
         height: 100%;
         width: auto;
-        filter: grayscale(100%) contrast(var(--contrast)) brightness(var(--brightness)) blur(var(--blur));
+        filter: grayscale(100%) contrast(var(--contrast)) brightness(var(--brightness));
+        transition: filter var(--duration) linear;
     }
 
     .background-img[src=""]

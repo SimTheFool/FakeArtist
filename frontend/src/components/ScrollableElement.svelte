@@ -70,7 +70,6 @@
         text-align: end;
         width: 100%;
         font-size: 1.5em;
-        font-weight: 900;
         color: var(--color);
         text-shadow: 0px 0px 2px black;
 
@@ -84,6 +83,7 @@
     {
         cursor: pointer;
         pointer-events: auto;
+        padding-right: 0.5em;
     }
 
     .scroll-top

@@ -41,7 +41,7 @@
 		height: 100vh;
 		color: white;
 		font-family:  'Alegreya Sans SC', sans-serif;
-		font-size: 1.5em;
+		font-size: 1.15em;
 	}
 
 	#content
@@ -49,6 +49,31 @@
         position: absolute;
         width: 100%;
         height: 100%;
-        padding: 2em 1.2em 1em 1.2em;
+        padding: 2em 1.2em 1em 3.5vw;
     }
+
+	@media (min-width: 390px)
+    {
+        main
+        {
+            font-size: 1.5em;
+        }
+	}
+
+	@media (min-width: 960px)
+    {
+        main
+        {
+            font-size: 1.8em;
+        }
+	}
+
+	@media (min-width: 1280px)
+    {
+        main
+        {
+            /* font-size: 2.1em; */
+			font-weight: 200;
+        }
+	}
 </style>

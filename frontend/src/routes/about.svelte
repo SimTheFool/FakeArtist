@@ -14,20 +14,6 @@
     
         {/each}
 
-        {#each elems as article}
-
-            <h2>{article.title}</h2>
-            <p>{article.content}</p>
-            
-        {/each}
-
-        {#each elems as article}
-
-            <h2>{article.title}</h2>
-            <p>{article.content}</p>
-            
-        {/each}
-
     </ScrollableElement>
 
 
@@ -82,10 +68,12 @@
         width: 100%;
         height: 100%;
         opacity: var(--opacity);
+        font-family: 'Spartan', sans-serif;
     }
 
     h2
     {
+        text-align: center;
         font-size: 1em;
         margin: 1em 0 0.25em 0;
     }
@@ -97,7 +85,17 @@
 
     p
     {
-        font-size: 0.7em;
+        font-size: 0.65em;
         margin: 0;
+        font-weight: 300;
+        text-indent: 2em;
     }
+
+    @media (min-width: 1280px)
+    {
+        #about
+        {
+            padding: 0 3em;
+        }
+	}
 </style>

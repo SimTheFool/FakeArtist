@@ -5,7 +5,7 @@ const fakeDB =
         "": 
         {
             src : "background0.jpg",
-            scale : 125,
+            scale : 1.25,
             offsetY : 0,
             brightness: 75,
             contrast: 250,
@@ -21,7 +21,7 @@ const fakeDB =
         "drawings": 
         {
             src : "background1.jpg",
-            scale : 100,
+            scale : 1,
             offsetY : 0,
             brightness: 50,
             contrast: 150,
@@ -37,7 +37,7 @@ const fakeDB =
         "about": 
         {
             src : "background2.jpg",
-            scale : 100,
+            scale : 1,
             offsetY : 0,
             brightness: 50,
             contrast: 200,
@@ -53,7 +53,7 @@ const fakeDB =
         "contact":
         {
             src : "background3.jpg",
-            scale : 100,
+            scale : 1,
             offsetY : 0,
             brightness: 75,
             contrast: 150,
@@ -70,10 +70,12 @@ const fakeDB =
     "about":
     [
         {
-            "title": "Lorem Ipsum",
-            "content" : "Dolor sit amet"
-        },
-        {
+            "title": "Ecce Gratum",
+            "content" : "tum, orci eget luctus elementum, mi ex gravida nisi, sed faucibus tellus lorem vitae lorem. Ut bibendum nisi arcu, eget tincidunt mi imperdiet id. Proin nec massa dui. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Mauris tristique nec arcu eu venenatis. Pellentesque commodo elit eu justo cursus, nec commodo dui porta. Sed dignissim urna sed felis molestie, a aliquam augue aliquet. Praesent facilisis sed velit eu rhoncus. Maecenas lacinia cursus nulla, ut vulputate felis porttitor eu. Sed porta risus nec pretium fringilla. Phasellus dignissim euismod ligula ac aliquam. Maecenas placerat tempus lectus et bibendum. Vivamus sagittis id erat non porta. Mauris faucibus magna eget tempor euismod."
+        },{
+            "title": "Ecce Gratum",
+            "content" : "tum, orci eget luctus elementum, mi ex gravida nisi, sed faucibus tellus lorem vitae lorem. Ut bibendum nisi arcu, eget tincidunt mi imperdiet id. Proin nec massa dui. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Mauris tristique nec arcu eu venenatis. Pellentesque commodo elit eu justo cursus, nec commodo dui porta. Sed dignissim urna sed felis molestie, a aliquam augue aliquet. Praesent facilisis sed velit eu rhoncus. Maecenas lacinia cursus nulla, ut vulputate felis porttitor eu. Sed porta risus nec pretium fringilla. Phasellus dignissim euismod ligula ac aliquam. Maecenas placerat tempus lectus et bibendum. Vivamus sagittis id erat non porta. Mauris faucibus magna eget tempor euismod."
+        },{
             "title": "Ecce Gratum",
             "content" : "tum, orci eget luctus elementum, mi ex gravida nisi, sed faucibus tellus lorem vitae lorem. Ut bibendum nisi arcu, eget tincidunt mi imperdiet id. Proin nec massa dui. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Mauris tristique nec arcu eu venenatis. Pellentesque commodo elit eu justo cursus, nec commodo dui porta. Sed dignissim urna sed felis molestie, a aliquam augue aliquet. Praesent facilisis sed velit eu rhoncus. Maecenas lacinia cursus nulla, ut vulputate felis porttitor eu. Sed porta risus nec pretium fringilla. Phasellus dignissim euismod ligula ac aliquam. Maecenas placerat tempus lectus et bibendum. Vivamus sagittis id erat non porta. Mauris faucibus magna eget tempor euismod."
         }
@@ -115,6 +117,15 @@ const fakeDB =
         },
         {
             src : "drawing6.jpg"
+        },
+        {
+            src : "background0.jpg"
+        },
+        {
+            src : "background1.jpg"
+        },
+        {
+            src : "background2.jpg"
         }
     ]
 };

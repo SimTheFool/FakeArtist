@@ -6,7 +6,7 @@
             </svg>
         </Navlink>
 
-        {#if !shouldNavTop}
+        {#if !shouldNavTop || !mobileLayout}
             <h1 class="title">
                 Fake Artist
             </h1>
@@ -49,8 +49,9 @@
 
 	onMount(() => {
 		mobileLayout = (window.matchMedia("(min-width: 1280px)").matches) ? false : true;
-		window.addEventListener("orientationchange",(e) => { 
-			mobileLayout = window.matchMedia("(min-width: 1280px)").matches;
+		window.addEventListener("orientationchange",(e) => {
+            
+			mobileLayout = (window.matchMedia("(min-width: 1280px)").matches) ? false : true;
 		});
 	});
 
@@ -82,6 +83,8 @@
 
     subscribeOnExit((state, ctx) => {
         let newShouldNavTop = ctx.nextUrl ? true : false;
+        if(!mobileLayout) return;
+
         if(newShouldNavTop != shouldNavTop)
         {
             transitNavBar(0, 16, ctx.stepDuration);
@@ -115,7 +118,7 @@
         justify-content: flex-end;
 		align-content: space-around;    
 		
-		padding: 0 1em 0 1em;
+		padding: 0 3.5vw 0 3.5vw;
 
         font-size: 1em;
 	}
@@ -198,7 +201,8 @@
 
 	.nav-top header
 	{
-		margin-left: 2em;
+		margin-left: 0;
+        min-width: 25%;
 	}
 
     .nav-top .logo

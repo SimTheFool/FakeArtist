@@ -62,7 +62,10 @@
 
         justify-content: center;
         align-content: center;
-        align-items: center;
+
+        padding-top: 10vh;
+
+        font-weight: 400;
     }
 
     form
@@ -85,6 +88,7 @@
         padding: 0.2em 1em 0.2em 1em;
 
         transition: border 0.5s linear;
+        outline: none;
     }
 
     .form-elem:focus
@@ -116,6 +120,7 @@
     #message
     {
         width:100%;
+        max-height: 35vh;
     }
 
     button
