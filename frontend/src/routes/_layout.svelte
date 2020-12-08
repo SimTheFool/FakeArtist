@@ -10,6 +10,7 @@
 
 <script context="module">
 	import {setBackgrounds} from "stores/background.js";
+	import { changeRoute } from "machines/routeMachine.js";
 
     export async function preload(page, session) {
         const res = await this.fetch(`api/backgrounds`);
@@ -29,6 +30,10 @@
 	onMount(() => {
 		let link = document.querySelector(`#${segment ? segment : "home"}-nav-link`);
 		link.click();
+
+		window.addEventListener('popstate', e => {
+			changeRoute(window.location.href.match(/^.*\/(.*)$/)[1]);
+		});
 	});
 </script>
 

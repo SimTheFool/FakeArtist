@@ -125,10 +125,6 @@
         filter: grayscale(0.3) contrast(150%) brightness(80%);
     }
 
-    .drawing-expanded :global(img)
-    {
-        box-shadow: none;
-    }
 
     .drawing-expanded:hover
     {

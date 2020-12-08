@@ -1,14 +1,23 @@
-<img bind:this={img} class="lazy-img" src="" data-src={src} alt={alt}>
+<img bind:this={img} class="lazy-img" class:lazy-img-loading={loading} src="" data-src={src} alt={alt}>
 
 <script>
-    import { onMount, onDestroy } from "svelte";
+    import { onMount } from "svelte";
 
     export let src;
     export let alt;
     
     let img;
+    let loading = true;
 
     onMount(() => {
+        img.addEventListener("load", () => {
+            loading = false;
+        });
+
+        img.addEventListener("error", () => {
+            loading = false;
+        });
+
         if ("IntersectionObserver" in window)
         {
             let observer = new IntersectionObserver((entries, observer) => {
@@ -32,7 +41,7 @@
 </script>
 
 <style>
-    img
+    .lazy-img
     {
         display: block;
         width: 100%;
@@ -40,8 +49,8 @@
         object-fit: contain;
     }
 
-    img[src=""]
+    .lazy-img-loading
     {
-        font-size: 0;
+        color: rgba(0, 0, 0, 0);
     }
 </style>
