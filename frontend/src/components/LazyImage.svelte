@@ -49,7 +49,7 @@
         object-fit: contain;
     }
 
-    .lazy-img-loading
+    .lazy-img-loading, .lazy-img[src=""]
     {
         color: rgba(0, 0, 0, 0);
         opacity: 0;
