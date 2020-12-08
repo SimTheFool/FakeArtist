@@ -65,7 +65,24 @@ const fakeDB =
                 lightboxColor: "#5c85d6",
                 lightboxMaxScale: 1.6
             }
+        },
+        "404":
+        {
+            src : "background3.jpg",
+            scale : 1,
+            offsetY : 0,
+            brightness: 75,
+            contrast: 150,
+            color: "#5e83ab",
+            lightbox:
+            {
+                lightboxX: 110,
+                lightboxY: 10,
+                lightboxColor: "#5c85d6",
+                lightboxMaxScale: 1.6
+            }
         }
+        
     },
     "about":
     [

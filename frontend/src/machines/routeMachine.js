@@ -78,6 +78,7 @@ export const routeMachine = useMachine({
 export const changeRoute = (url) => {
     routeMachine.context.nextUrl = url;
     routeMachine.send("ROUTE_CHANGE");
+    
 };
 
 export const subscribeOnExit = createMachineSubscriber(routeMachine, "exit");

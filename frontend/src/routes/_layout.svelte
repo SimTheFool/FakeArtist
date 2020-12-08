@@ -12,11 +12,15 @@
 	import {setBackgrounds} from "stores/background.js";
 	import { changeRoute } from "machines/routeMachine.js";
 
-    export async function preload(page, session) {
-        const res = await this.fetch(`api/backgrounds`);
-		const datas = await res.json();
-		setBackgrounds(datas);
-        return;
+    export function preload(page, session) {
+		return new Promise(async (resolve, reject) => {
+			const res = await this.fetch(`api/backgrounds`).catch(e => {
+				reject(e);
+			});
+			const datas = await res.json();
+			setBackgrounds(datas);
+			resolve();
+		});
 	}
 </script>
 
@@ -25,11 +29,8 @@
 	import Background from "components/Background.svelte";
 	import Navbar from "components/Navbar.svelte";
 
-	export let segment;
-
 	onMount(() => {
-		let link = document.querySelector(`#${segment ? segment : "home"}-nav-link`);
-		link.click();
+		changeRoute(window.location.href.match(/^.*\/(.*)$/)[1]);
 
 		window.addEventListener('popstate', e => {
 			changeRoute(window.location.href.match(/^.*\/(.*)$/)[1]);
