@@ -52,5 +52,6 @@
     .lazy-img-loading
     {
         color: rgba(0, 0, 0, 0);
+        opacity: 0;
     }
 </style>
