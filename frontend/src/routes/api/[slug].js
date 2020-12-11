@@ -87,8 +87,8 @@ const fakeDB =
     "about":
     [
         {
-            "title": "Ecce Gratum",
-            "content" : "tum, orci eget luctus elementum, mi ex gravida nisi, sed faucibus tellus lorem vitae lorem. Ut bibendum nisi arcu, eget tincidunt mi imperdiet id. Proin nec massa dui. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Mauris tristique nec arcu eu venenatis. Pellentesque commodo elit eu justo cursus, nec commodo dui porta. Sed dignissim urna sed felis molestie, a aliquam augue aliquet. Praesent facilisis sed velit eu rhoncus. Maecenas lacinia cursus nulla, ut vulputate felis porttitor eu. Sed porta risus nec pretium fringilla. Phasellus dignissim euismod ligula ac aliquam. Maecenas placerat tempus lectus et bibendum. Vivamus sagittis id erat non porta. Mauris faucibus magna eget tempor euismod."
+            "title": "Disclaimer",
+            "content" : "This website is a false artist portfolio I've made for personnal technical tests. I'm not the designer of the paintings and drawings used, and I chose them randomly from all the images I have been downloading for years, so I don't know their respective artists. This website won't be indexed by any search engine, but if you're the author of one of the graphic art used here and you want me to delete it, feel free to tell me."
         },{
             "title": "Ecce Gratum",
             "content" : "tum, orci eget luctus elementum, mi ex gravida nisi, sed faucibus tellus lorem vitae lorem. Ut bibendum nisi arcu, eget tincidunt mi imperdiet id. Proin nec massa dui. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Mauris tristique nec arcu eu venenatis. Pellentesque commodo elit eu justo cursus, nec commodo dui porta. Sed dignissim urna sed felis molestie, a aliquam augue aliquet. Praesent facilisis sed velit eu rhoncus. Maecenas lacinia cursus nulla, ut vulputate felis porttitor eu. Sed porta risus nec pretium fringilla. Phasellus dignissim euismod ligula ac aliquam. Maecenas placerat tempus lectus et bibendum. Vivamus sagittis id erat non porta. Mauris faucibus magna eget tempor euismod."
